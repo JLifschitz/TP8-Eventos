@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Button, View, Text, TextInput, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-const LoginScreen = () => {
+const LoginScreen = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [contraseña, setContraseña] = useState('');
   const [token, setToken] = useState(null);
   const navigation = useNavigation();
-  const urlApi = `http://localhost:3000/api/user/login`;
+  const urlApi = `gentle-pika-cunning.ngrok-free.app/api/user/login`;
 
   const fetchToken = async () => {
     try {

@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { View, StyleSheet, Text, TextInput, Button } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-const RegistrarseScreen = () => {
+const RegistrarseScreen = ({navigation}) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [contraseña, setContraseña] = useState('');
   const navigation = useNavigation();
-  const urlApi = `http://localhost:3000/api/user/register`;
+  const urlApi = `gentle-pika-cunning.ngrok-free.app/api/user/register`;
 
   const registrarsePost = async () => {
     try {
