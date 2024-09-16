@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Text, TextInput, Button } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import DBDomain from '../constants/DBDomain.js';
 
 const RegistrarseScreen = ({navigation}) => {
   const [firstName, setFirstName] = useState('');
@@ -8,7 +9,7 @@ const RegistrarseScreen = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [contraseña, setContraseña] = useState('');
   const navigation = useNavigation();
-  const urlApi = `gentle-pika-cunning.ngrok-free.app/api/user/register`;
+  const urlApi = `${DBDomain}/api/user/register`;
 
   const registrarsePost = async () => {
     try {

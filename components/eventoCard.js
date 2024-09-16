@@ -1,18 +1,21 @@
 import * as React from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
-import { FlatList } from 'react-native-web';
 
-const Evento = ({props}) => {
+const EventoCard = ({props}) => {
   return (
     <View style={styles.container}>
         <Text style={styles.titulo}>{props.name}</Text>
         <Text>Descripción: {props.description}</Text>
-        <Text>categorias: {}</Text>
+        <Text>categorias:</Text>
         <FlatList
             data={props.Category}
             renderItem={({item}) => <Text>{item.name}</Text>}
         />
-        <Text>lugar: {props.Ubication}</Text>
+        <Text>lugar:</Text>
+        <FlatList
+            data={props.Ubication}
+            renderItem={({item}) => <Text>{item.item}</Text>}
+        />
         <Text>Fecha: {props.start_date}</Text>
         <Text>Duracion: {props.duration_in_minutes}</Text>
         <Text>Precio: {props.price}</Text>
@@ -36,4 +39,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Evento;
+export default EventoCard;
