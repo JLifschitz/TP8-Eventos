@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Button, TextInput } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import DBDomain from '../constants/DBDomain.js';
 import {useUserContext} from '../context/userContext.js';
@@ -18,9 +18,41 @@ function FormularioScreen ({navigation}) {
   const [tags, setTags] = useState('');
 
   const {usuario} = useUserContext();
-  const urlApi = `${DBDomain}/api/event`;
+
+  const fetchCategories = async () => {
+    const urlApi = `${DBDomain}/api/event_categories`;
+    try {
+      const response = await fetch(urlApi);
+      if (!response.ok) throw new Error('Failed to fetch data');
+
+      const data = await response.json();
+      if (!data) throw new Error('No data returned');
+
+      console.log('data: ', data);
+      return data;
+    } catch (error) {
+      console.log('Hubo un error en el fetchCategories', error);
+    }
+  };
+
+  const fetchTags = async () => {
+    const urlApi = `${DBDomain}/api/event_tags`;
+    try {
+      const response = await fetch(urlApi);
+      if (!response.ok) throw new Error('Failed to fetch data');
+
+      const data = await response.json();
+      if (!data) throw new Error('No data returned');
+
+      console.log('data: ', data);
+      return data;
+    } catch (error) {
+      console.log('Hubo un error en el fetchTags', error);
+    }
+  };
 
   const createEventPost = async () => {
+    const urlApi = `${DBDomain}/api/event`;
     try {
       const response = await fetch(urlApi, {
         method: 'POST',
@@ -84,8 +116,19 @@ function FormularioScreen ({navigation}) {
         />
         <Picker
           selectedValue={id_event_category}
-          onValueChange={(item.value) => setIdEventCategory(item.id)}
+          onValueChange={(itemValue) => setIdEventCategory(itemValue)}
         >
+          {categories.map((category) => (
+            <Picker.Item key={category.id} label={category.name} value={category.id} />
+          ))}
+        </Picker>
+        <Picker
+          selectedValue={id_event_location}
+          onValueChange={(itemValue) => setIdEventLocation(itemValue)}
+        >
+          {locations.map((location) => (
+            <Picker.Item key={location.id} label={location.name} value={location.id} />
+          ))}
         </Picker>
         <TextInput
           placeholder="Fecha"
@@ -120,7 +163,7 @@ function FormularioScreen ({navigation}) {
         />
       </View>
       <Button title="Confirmar" onPress={crearEvento}/>
-      <Button title="Cancelar" onPress={navigation.navigate('Home')}/>
+      <Button title="Cancelar" onPress={() => navigation.navigate('Home')}/>
     </View>
   );
 };
