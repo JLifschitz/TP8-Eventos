@@ -7,7 +7,9 @@ import {useUserContext} from '../context/userContext.js';
 function FormularioScreen ({navigation}) {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
+  const [categories, setCategories] = useState('');
   const [id_event_category, setIdEventCategory] = useState('');
+  const [locations, setLocations] = useState('');
   const [id_event_location, setIdEventLocation] = useState('');
   const [start_date, setStartDate] = useState('');
   const [duration_in_minutes, setDurationInMinutes] = useState('');
@@ -80,6 +82,11 @@ function FormularioScreen ({navigation}) {
           autoCapitalize="none"
           style={styles.input}
         />
+        <Picker
+          selectedValue={id_event_category}
+          onValueChange={(item.value) => setIdEventCategory(item.id)}
+        >
+        </Picker>
         <TextInput
           placeholder="Fecha"
           value={start_date}
