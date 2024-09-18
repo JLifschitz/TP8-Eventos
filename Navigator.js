@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import {UserProvider, useUserContext} from './context/userContex.js';
+import {UserProvider, useUserContext} from './context/userContext.js';
 import HomeScreen from './pantallas/Home';
 import LoginScreen from './pantallas/Login';
 import RegistrarseScreen from './pantallas/Registrarse';

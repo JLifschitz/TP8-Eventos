@@ -4,7 +4,6 @@ import { useNavigation } from '@react-navigation/native';
 import EventoCard from '../components/eventoCard.js';
  
 function HomeScreen ({navigation}) {
-  const navigation = useNavigation();
   const [eventos, setEventos] = useState();
   const urlApi = `${DBDomain}/api/event`;
 

@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { Picker } from '@react-native-picker/picker';
 import DBDomain from '../constants/DBDomain.js';
-import {useUserContext} from './context/UserContext';
+import {useUserContext} from '../context/userContext.js';
 
 function FormularioScreen ({navigation}) {
   const [name, setName] = useState('');
@@ -16,7 +16,6 @@ function FormularioScreen ({navigation}) {
   const [tags, setTags] = useState('');
 
   const {usuario} = useUserContext();
-  const navigation = useNavigation();
   const urlApi = `${DBDomain}/api/event`;
 
   const createEventPost = async () => {
@@ -56,10 +55,10 @@ function FormularioScreen ({navigation}) {
     }
   };
 
-  const registrarse = async () => {
-    const data = await registrarsePost();
+  const crearEvento = async () => {
+    const data = await createEventPost();
     if (data && data.length > 0) {
-      navigation.navigate('Login');
+      navigation.navigate('Home');
     }
   };
 
@@ -68,37 +67,53 @@ function FormularioScreen ({navigation}) {
       <Text>Registro de Usuario</Text>
       <View style={styles.inputContainer}>
         <TextInput
-          placeholder="First Name"
-          value={firstName}
-          onChangeText={setFirstName}
+          placeholder="Nombre"
+          value={name}
+          onChangeText={setName}
           autoCapitalize="none"
           style={styles.input}
         />
         <TextInput
-          placeholder="Last Name"
-          value={lastName}
-          onChangeText={setLastName}
+          placeholder="Descripcion"
+          value={description}
+          onChangeText={setDescription}
           autoCapitalize="none"
           style={styles.input}
         />
         <TextInput
-          placeholder="Email"
-          value={email}
-          onChangeText={setEmail}
+          placeholder="Fecha"
+          value={start_date}
+          onChangeText={setStartDate}
           autoCapitalize="none"
           style={styles.input}
         />
         <TextInput
-          placeholder="Contraseña"
-          value={contraseña}
-          onChangeText={setContraseña}
+          placeholder="Duracion"
+          value={duration_in_minutes}
+          onChangeText={setDurationInMinutes}
+          autoCapitalize="none"
+          secureTextEntry
+          style={styles.input}
+        />
+        <TextInput
+          placeholder="Precio"
+          value={price}
+          onChangeText={setPrice}
+          autoCapitalize="none"
+          secureTextEntry
+          style={styles.input}
+        />
+        <TextInput
+          placeholder="Cantidad maxima de personas"
+          value={max_assistance}
+          onChangeText={setMaxAssistance}
           autoCapitalize="none"
           secureTextEntry
           style={styles.input}
         />
       </View>
-      <Button title="Registrarse" onPress={registrarse} />
-      <Button title="¿Ya tienes cuenta?" onPress={() => navigation.navigate('Login')} />
+      <Button title="Confirmar" onPress={crearEvento}/>
+      <Button title="Cancelar" onPress={navigation.navigate('Home')}/>
     </View>
   );
 };
@@ -109,9 +124,16 @@ const styles = StyleSheet.create({
      alignItems: 'center',
      backgroundColor: '#ffffff',
    },
-   logo: {
-     width: 100, // Ajusta el tamaño del logo según sea necesario
-     height: 100,
-   },
+   inputContainer: {
+    width: '80%',
+    marginBottom: 20,
+  },
+   input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    padding: 10,
+    marginVertical: 10,
+    borderRadius: 5,
+  },
  });
 export default FormularioScreen;

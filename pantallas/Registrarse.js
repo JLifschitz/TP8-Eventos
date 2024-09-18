@@ -8,7 +8,6 @@ const RegistrarseScreen = ({navigation}) => {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [contraseña, setContraseña] = useState('');
-  const navigation = useNavigation();
   const urlApi = `${DBDomain}/api/user/register`;
 
   const registrarsePost = async () => {
