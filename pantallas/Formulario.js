@@ -15,7 +15,6 @@ function FormularioScreen ({navigation}) {
   const [duration_in_minutes, setDurationInMinutes] = useState('');
   const [price, setPrice] = useState('');
   const [max_assistance, setMaxAssistance] = useState('');
-  const [tags, setTags] = useState('');
 
   const {usuario} = useUserContext();
 
@@ -35,8 +34,8 @@ function FormularioScreen ({navigation}) {
     }
   };
 
-  const fetchTags = async () => {
-    const urlApi = `${DBDomain}/api/event_tags`;
+  const fetchLocations = async () => {
+    const urlApi = `${DBDomain}/api/event_locations`;
     try {
       const response = await fetch(urlApi);
       if (!response.ok) throw new Error('Failed to fetch data');
@@ -47,7 +46,7 @@ function FormularioScreen ({navigation}) {
       console.log('data: ', data);
       return data;
     } catch (error) {
-      console.log('Hubo un error en el fetchTags', error);
+      console.log('Hubo un error en el fetchLocations', error);
     }
   };
 
@@ -95,6 +94,28 @@ function FormularioScreen ({navigation}) {
       navigation.navigate('Home');
     }
   };
+
+  useEffect(() => {
+    const fetchAndSetCategories = async () => {
+      console.log('Categories (antes del fetch): ');
+      const data = await fetchCategories();
+      console.log('Categories (despues del fetch): ', data );
+      if (data.length > 0) {
+        setCategories(data);
+      }
+    };
+    const fetchAndSetLocations = async () => {
+      console.log('Locations (antes del fetch): ');
+      const data = await fetchLocations();
+      console.log('Locations (despues del fetch): ', data );
+      if (data.length > 0) {
+        setLocations(data);
+      }
+    };
+
+    fetchAndSetCategories();
+    fetchAndSetLocations();
+  }, []);
 
   return (
     <View style={styles.container}>

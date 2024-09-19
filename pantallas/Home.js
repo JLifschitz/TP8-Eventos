@@ -22,8 +22,8 @@ function HomeScreen ({navigation}) {
     }
   };
 
-  useEffect(() => {
-    const events = fetchEvents();
+  useEffect( async () => {
+    const events = await fetchEvents();
     if (events.lentgh > 0) setEventos(events)
   }, []);
 
