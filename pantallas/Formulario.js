@@ -3,8 +3,11 @@ import { View, Text, StyleSheet, Button, TextInput } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import DBDomain from '../constants/DBDomain.js';
 import {useUserContext} from '../context/userContext.js';
+import ConfirmacionModal from '../components/Confirmacion.js';
 
 function FormularioScreen ({navigation}) {
+  const {usuario} = useUserContext();
+
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [categories, setCategories] = useState('');
@@ -16,7 +19,17 @@ function FormularioScreen ({navigation}) {
   const [price, setPrice] = useState('');
   const [max_assistance, setMaxAssistance] = useState('');
 
-  const {usuario} = useUserContext();
+  let newEvent = {
+    name: name,
+    description: description,
+    id_event_category: id_event_category,
+    id_event_location: id_event_location,
+    start_date: start_date,
+    duration_in_minutes: duration_in_minutes,
+    price: price,
+    max_assistance: max_assistance,
+    id_creator_user: usuario.id,
+  }
 
   const fetchCategories = async () => {
     const urlApi = `${DBDomain}/api/event_categories`;
@@ -50,51 +63,6 @@ function FormularioScreen ({navigation}) {
     }
   };
 
-  const createEventPost = async () => {
-    const urlApi = `${DBDomain}/api/event`;
-    try {
-      const response = await fetch(urlApi, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: name,
-          description: description,
-          id_event_category: id_event_category,
-          id_event_location: id_event_location,
-          start_date: start_date,
-          duration_in_minutes: duration_in_minutes,
-          price: price,
-          enable_for_enrollment: true,
-          max_assistance: max_assistance,
-          id_creator_user: usuario.id,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch data');
-      }
-
-      const data = await response.json();
-      if (!data) {
-        throw new Error('No data returned');
-      }
-
-      console.log('data: ', data);
-      return data;
-    } catch (error) {
-      console.log('Hubo un error en el register', error);
-    }
-  };
-
-  const crearEvento = async () => {
-    const data = await createEventPost();
-    if (data && data.length > 0) {
-      navigation.navigate('Home');
-    }
-  };
-
   useEffect(() => {
     const fetchAndSetCategories = async () => {
       console.log('Categories (antes del fetch): ');
@@ -117,8 +85,16 @@ function FormularioScreen ({navigation}) {
     fetchAndSetLocations();
   }, []);
 
+  //abrir y cerrar modal
+  const [visible, setVisible] = useState(false);
+  const abrirModal = () =>
+  {
+    setVisible(true);
+  };
+
   return (
     <View style={styles.container}>
+      <ConfirmacionModal visible={visible} setVisible={setVisible} newEvent={newEvent}/>
       <Text>Registro de Usuario</Text>
       <View style={styles.inputContainer}>
         <TextInput
@@ -183,7 +159,7 @@ function FormularioScreen ({navigation}) {
           style={styles.input}
         />
       </View>
-      <Button title="Confirmar" onPress={crearEvento}/>
+      <Button title="Confirmar" onPress={abrirModal}/>
       <Button title="Cancelar" onPress={() => navigation.navigate('Home')}/>
     </View>
   );
