@@ -1,6 +1,7 @@
 import React, { FC, useEffect, useState, useMemo } from 'react';
 import { StyleSheet, TouchableOpacity, View, Text, Modal, Dimensions, ScrollView } from 'react-native';
 import DBDomain from '@/constants/dbDomain';
+import Success from './Success';
 
 
 const ConfirmacionModal = ({props}) => {
@@ -52,6 +53,7 @@ const ConfirmacionModal = ({props}) => {
   const crearEvento = async () => {
     const data = await createEventPost();
     if (data && data.length > 0) {
+      alert(Success);
       navigation.navigate('Home');
     }
   };
