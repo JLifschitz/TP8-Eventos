@@ -43,7 +43,9 @@ const RegistrarseScreen = ({navigation}) => {
 
   const registrarse = async () => {
     const data = await registrarsePost();
-    if (data && data.length > 0) {
+    console.log('RegistrarsePost: ', data.data);
+    if (data !== null) {
+      console.log('RegistrarsePost: ', data.data);
       navigation.navigate('Login');
     }
   };
@@ -53,14 +55,14 @@ const RegistrarseScreen = ({navigation}) => {
       <Text>Registro de Usuario</Text>
       <View style={styles.inputContainer}>
         <TextInput
-          placeholder="First Name"
+          placeholder="Primer nombre"
           value={firstName}
           onChangeText={setFirstName}
           autoCapitalize="none"
           style={styles.input}
         />
         <TextInput
-          placeholder="Last Name"
+          placeholder="Apellido"
           value={lastName}
           onChangeText={setLastName}
           autoCapitalize="none"
