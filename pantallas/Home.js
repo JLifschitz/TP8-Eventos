@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { View, Text, StyleSheet, FlatList, Button} from 'react-native';
+import { View, Text, StyleSheet, FlatList, Button, Pressable} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import EventoCard from '../components/eventoCard.js';
  
@@ -33,8 +33,12 @@ function HomeScreen ({navigation}) {
       <View>
         <Button title="Cargar nuevo evento" onPress={() => navigation.navigate('Formulario')}/>
         <FlatList
-            data={eventos}
-            renderItem={({item}) => <EventoCard props={item}/>}
+          data={eventos}
+          renderItem={({item}) =>
+            <Pressable onPress={() => navigation.navigate('DetallesEvento', {id_event: item.id})}>
+              <EventoCard props={item}/>
+            </Pressable>
+          }
         />
       </View>
     </View>
