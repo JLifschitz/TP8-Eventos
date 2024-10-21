@@ -6,6 +6,7 @@ import HomeScreen from './pantallas/Home';
 import LoginScreen from './pantallas/Login';
 import RegistrarseScreen from './pantallas/Registrarse';
 import FormularioScreen from './pantallas/Formulario';
+import DetallesEventoScreen from './pantallas/DetallesEvento';
 const Stack = createNativeStackNavigator();
 
 const navigation = () => {
@@ -21,6 +22,7 @@ const navigation = () => {
           <Stack.Screen name="Registrarse" component={RegistrarseScreen}/>
           <Stack.Screen name="Home" component={HomeScreen}/>
           <Stack.Screen name="Formulario" component={FormularioScreen}/>
+          <Stack.Screen name="DetallesEvento" component={DetallesEventoScreen}/>
         </Stack.Navigator>
       </NavigationContainer>
     </UserProvider>

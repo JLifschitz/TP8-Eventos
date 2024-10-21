@@ -5,7 +5,7 @@ import EventoCard from '../components/eventoCard.js';
  
 function HomeScreen ({navigation}) {
   const [eventos, setEventos] = useState();
-  const urlApi = `${DBDomain}/api/event`;
+  const urlApi = `${DBDomain}/api/event?start_date=${Date.now()}`;
 
   const fetchEvents = async () => {
     try {
@@ -40,15 +40,17 @@ function HomeScreen ({navigation}) {
     </View>
   )
 }
- const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: '#ffffff',
-    },
-    logo: {
-      
-    },
-  });
- export default HomeScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#ffffff',
+  },
+  logo: {
+    
+  },
+});
+
+export default HomeScreen;
