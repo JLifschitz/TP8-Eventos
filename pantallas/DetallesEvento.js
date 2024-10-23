@@ -22,6 +22,11 @@ function DetallesEventoScreen ({navigation, id_event}) {
     };
 
     const inscribirse = async () => {
+
+      if (inscripciones >= capacidadMaxima) {
+        Alert.alert("No hay plazas");
+        return;
+    }
         const urlApi = `${DBDomain}/api/event/${id_event}/enrollment`;
         try {
             const response = await fetch(urlApi, {
