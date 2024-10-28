@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { View, Text, StyleSheet, FlatList, Button} from 'react-native';
+import DBDomain from '../constants/DBDomain.js';
 import EventoCard from '../components/eventoCard.js';
  
 function DetallesEventoScreen ({navigation, id_event}) {

@@ -1,8 +1,8 @@
-import AppNavigator from './Navigator';
+import Navigator from './Navigator';
 
 const App = () => {
   return (
-      <AppNavigator/>
+      <Navigator/>
   );
 };
 

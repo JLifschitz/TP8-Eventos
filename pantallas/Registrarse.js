@@ -8,9 +8,9 @@ const RegistrarseScreen = ({navigation}) => {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [contraseña, setContraseña] = useState('');
-  const urlApi = `${DBDomain}/api/user/register`;
-
+  
   const registrarsePost = async () => {
+    const urlApi = `${DBDomain}/api/user/register`;
     try {
       const response = await fetch(urlApi, {
         method: 'POST',
@@ -28,6 +28,7 @@ const RegistrarseScreen = ({navigation}) => {
       if (!response.ok) {
         throw new Error('Failed to fetch data');
       }
+      console.log('response: ', response);
 
       const data = await response.json();
       if (!data) {
@@ -43,9 +44,9 @@ const RegistrarseScreen = ({navigation}) => {
 
   const registrarse = async () => {
     const data = await registrarsePost();
-    console.log('RegistrarsePost: ', data.data);
+    console.log('RegistrarsePost: ', data);
     if (data !== null) {
-      console.log('RegistrarsePost: ', data.data);
+      console.log('RegistrarsePost: ', data);
       navigation.navigate('Login');
     }
   };

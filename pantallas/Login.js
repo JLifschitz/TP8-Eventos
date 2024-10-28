@@ -7,7 +7,7 @@ import {useUserContext} from '../context/userContext.js';
 const LoginScreen = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [contraseña, setContraseña] = useState('');
-  const {token, setToken, usuario, SetUsuario} = useUserContext();
+  const {token, setToken, usuario, setUsuario} = useUserContext();
   const urlApi = `${DBDomain}/api/user/login`;
 
   const fetchToken = async () => {
@@ -40,10 +40,12 @@ const LoginScreen = ({navigation}) => {
 
   const generateToken = async () => {
     const data = await fetchToken();
-    if (data && data.length > 0) {
-      setToken(data);
+    console.log('login: ', data);
+    if (data && data.token) {
+      setToken(data.token);
     }
   };
+
 
   useEffect( () =>{
     setToken(null);
@@ -52,12 +54,7 @@ const LoginScreen = ({navigation}) => {
   useEffect( () =>{
   if (token !== null)
   {
-    verifyToken();
-    if (usuario !== null)
-    {
-      console.log('usuario: ', usuario)
-      navigation.navigate('Home');
-    }
+    navigation.navigate('Home');
   }
   }, [token]);
 

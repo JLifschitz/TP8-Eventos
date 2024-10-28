@@ -9,7 +9,7 @@ import FormularioScreen from './pantallas/Formulario';
 import DetallesEventoScreen from './pantallas/DetallesEvento';
 const Stack = createNativeStackNavigator();
 
-const navigation = () => {
+const Navigation = () => {
   return (
     <UserProvider>
       <NavigationContainer>
@@ -29,4 +29,4 @@ const navigation = () => {
   );
 };
 
-export default navigation;
+export default Navigation;

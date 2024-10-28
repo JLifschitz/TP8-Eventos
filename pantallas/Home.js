@@ -1,15 +1,21 @@
 import React, {useState, useEffect} from 'react';
 import { View, Text, StyleSheet, FlatList, Button, Pressable} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import DBDomain from '../constants/DBDomain.js';
+import {useUserContext} from '../context/userContext.js';
 import EventoCard from '../components/eventoCard.js';
  
 function HomeScreen ({navigation}) {
   const [eventos, setEventos] = useState();
-  const urlApi = `${DBDomain}/api/event?start_date=${Date.now()}`;
-
+  const {token} = useUserContext();
+  const config = {
+    headers: { Authorization: `Bearer ${token}`}
+  }
+  
   const fetchEvents = async () => {
+    const urlApi = `${DBDomain}/api/event?start_date=${Date.now()}`;
     try {
-      const response = await fetch(urlApi);
+      const response = await fetch(urlApi, config);
       if (!response.ok) throw new Error('Failed to fetch data');
 
       const data = await response.json();
@@ -24,7 +30,7 @@ function HomeScreen ({navigation}) {
 
   useEffect( async () => {
     const events = await fetchEvents();
-    if (events.lentgh > 0) setEventos(events)
+    if (events.length > 0) setEventos(events)
   }, []);
 
   return (

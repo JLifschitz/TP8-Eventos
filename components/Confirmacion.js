@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState, useMemo } from 'react';
 import { StyleSheet, TouchableOpacity, View, Text, Modal, Dimensions, ScrollView } from 'react-native';
-import DBDomain from '@/constants/dbDomain';
+import DBDomain from '../constants/DBDomain.js';
 import Success from './Success';
 
 
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
         width: '83%',
         height: '40%',
         padding: 20,
-        backgroundColor: Colores.blanco,
+        backgroundColor: '#fff',
         borderRadius: 18,
         alignItems: 'center',
         justifyContent: 'space-between'
