@@ -13,7 +13,8 @@ function HomeScreen ({navigation}) {
   }
   
   const fetchEvents = async () => {
-    const urlApi = `${DBDomain}/api/event?start_date=${Date.now()}`;
+    const now = new Date().toISOString();
+    const urlApi = `${DBDomain}/api/event?start_date=${now}`;
     try {
       const response = await fetch(urlApi, config);
       if (!response.ok) throw new Error('Failed to fetch data');
