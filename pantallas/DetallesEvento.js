@@ -1,10 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import { View, Text, StyleSheet, FlatList, Button} from 'react-native';
 import DBDomain from '../constants/DBDomain.js';
-import EventoCard from '../components/eventoCard.js';
  
 function DetallesEventoScreen ({navigation, id_event}) {
     const [evento, setEvento] = useState();
+    console.log('detallesEvents', evento);
+
     
     const fetchEvents = async () => {
         const urlApi = `${DBDomain}/api/event/${id_event}`;
@@ -62,7 +63,11 @@ function DetallesEventoScreen ({navigation, id_event}) {
 
     useEffect( async () => {
         const event = await fetchEvents();
-        if (event.lentgh > 0) setEvento(event)
+        if (event.lentgh > 0) 
+        {
+          setEvento(event);
+          console.log('detallesEvents', evento);
+        }
     }, []);
 
     return (

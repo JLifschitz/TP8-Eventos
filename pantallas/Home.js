@@ -22,7 +22,6 @@ function HomeScreen ({navigation}) {
       const data = await response.json();
       if (!data) throw new Error('No data returned');
 
-      console.log('data: ', data);
       return data;
     } catch (error) {
       console.log('Hubo un error en el fetchEvents', error);
@@ -31,7 +30,10 @@ function HomeScreen ({navigation}) {
 
   useEffect( async () => {
     const events = await fetchEvents();
-    if (events.length > 0) setEventos(events)
+    if (events.length > 0)
+    {
+      setEventos(events);
+    }
   }, []);
 
   return (
@@ -43,7 +45,7 @@ function HomeScreen ({navigation}) {
           data={eventos}
           renderItem={({item}) =>
             <Pressable onPress={() => navigation.navigate('DetallesEvento', {id_event: item.id})}>
-              <EventoCard props={item}/>
+              <EventoCard evento={item}/>
             </Pressable>
           }
         />
