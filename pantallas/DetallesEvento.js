@@ -1,108 +1,210 @@
-import React, {useState, useEffect} from 'react';
-import { View, Text, StyleSheet, FlatList, Button} from 'react-native';
-import DBDomain from '../constants/DBDomain.js';
+// import React, {useState, useEffect} from 'react';
+// import { View, Text, StyleSheet, FlatList, Button} from 'react-native';
+// import DBDomain from '../constants/DBDomain.js';
  
-function DetallesEventoScreen ({navigation, route}) {
-  const [evento, setEvento] = useState();
-  const {id_event} = route.params;
+// function DetallesEventoScreen ({navigation, route}) {
+//   const [evento, setEvento] = useState();
+//   const {id_event} = route.params;
   
+//   const fetchEvent = async () => {
+//     const urlApi = `${DBDomain}/api/event/${id_event}`;
+//     try {
+//       const response = await fetch(urlApi);
+//       if (!response.ok) throw new Error('Failed to fetch data');
+
+//       const data = await response.json();
+//       if (!data) throw new Error('No data returned');
+
+//       return data;
+//     } catch (error) {
+//       console.log('Hubo un error en el fetchEvents', error);
+//     }
+//   };
+
+//   const inscribirse = async () => {
+
+//     if (inscripciones >= capacidadMaxima) {
+//       Alert.alert("No hay plazas");
+//       return;
+//   }
+//     const urlApi = `${DBDomain}/api/event/${id_event}/enrollment`;
+//     try {
+//       const response = await fetch(urlApi, {
+//         method: 'POST',
+//         headers: {
+//           'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify({
+//           id_event: id_event,
+//           id_user: id_user,
+//           description: '',
+//           attended: false,
+//           observations: '',
+//           rating: '',
+//         }),
+//       });
+  
+//       if (!response.ok) {
+//         throw new Error('Failed to fetch data');
+//       }
+
+//       const data = await response.json();
+//       if (!data) {
+//         throw new Error('No data returned');
+//       }
+//       return data;
+//       } catch (error) {
+//         console.log('Hubo un error en el login ', error);
+//       }
+//     }
+
+//   useEffect( async () => {
+//     const fetchAndSetEvent = async () => {
+//       const event = await fetchEvent();
+//       if (event) 
+//       {
+//         setEvento(event);
+//         console.log('fetchEvent: ', evento);
+//       };
+//     };
+
+//     fetchAndSetEvent();
+//   }, [id_event]);
+  
+//   if (!evento) {
+//     return <Text>Cargando...</Text>;
+//   }
+//   else{
+//     return (
+//       <View style={styles.container}>
+//         <Text>{evento.name}</Text>
+//         <View>
+//           <Text>{evento.description}</Text>
+//           <Text>Empieza: {evento.start_date}</Text>
+//           <Text>Duracion: {evento.duration_in_minutes}</Text>
+//           <Text>Precio: {evento.price}</Text>
+//           <Text>Location: {evento.Location}</Text>
+//           <Text>Categoria: {evento.Category}</Text>
+//           <Text>Tags: {evento.Tags}</Text>
+//           <Button title="Inscribirse" onPress={() => inscribirse()}/>
+//         </View>
+//       </View>
+//     )
+//   }
+// }
+
+// const styles = StyleSheet.create({
+//     container: {
+//         flex: 1,
+//         justifyContent: 'center',
+//         alignItems: 'center',
+//         backgroundColor: '#ffffff',
+//         },
+//     logo: {
+        
+//     },
+// });
+
+// export default DetallesEventoScreen;
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, FlatList, Button, Alert } from 'react-native';
+import DBDomain from '../constants/DBDomain.js';
+
+function DetallesEventoScreen({ navigation, route }) {
+  const [evento, setEvento] = useState(null); // Cambiado a `null` para controlar mejor el estado de carga
+  const { id_event } = route.params;
+
   const fetchEvent = async () => {
     const urlApi = `${DBDomain}/api/event/${id_event}`;
     try {
-      const response = await fetch(urlApi);
-      if (!response.ok) throw new Error('Failed to fetch data');
+    const response = await fetch(urlApi);
+    if (!response.ok) throw new Error('Failed to fetch data');
 
-      const data = await response.json();
-      if (!data) throw new Error('No data returned');
+    const data = await response.json();
+    if (!data) throw new Error('No data returned');
 
-      return data;
+    return data;
     } catch (error) {
-      console.log('Hubo un error en el fetchEvents', error);
+      console.log('Hubo un error en el fetchEvent', error);
+    return null;
     }
   };
 
   const inscribirse = async () => {
-
-    if (inscripciones >= capacidadMaxima) {
-      Alert.alert("No hay plazas");
-      return;
+  // Verificación de que el evento está cargado y tiene propiedades de capacidad
+  if (evento.inscripciones >= evento.capacidadMaxima) {
+  Alert.alert("No hay plazas disponibles");
+  return;
   }
-    const urlApi = `${DBDomain}/api/event/${id_event}/enrollment`;
-    try {
-      const response = await fetch(urlApi, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          id_event: id_event,
-          id_user: id_user,
-          description: '',
-          attended: false,
-          observations: '',
-          rating: '',
-        }),
-      });
   
-      if (!response.ok) {
-        throw new Error('Failed to fetch data');
-      }
+  const urlApi = `${DBDomain}/api/event/${id_event}/enrollment`;
+  try {
+  const response = await fetch(urlApi, {
+  method: 'POST',
+  headers: {
+  'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+  id_event: id_event,
+  id_user: id_user, // Asegúrate de que `id_user` esté definido o pasado como parámetro
+  description: '',
+  attended: false,
+  observations: '',
+  rating: '',
+  }),
+  });
+  if (!response.ok) throw new Error('Failed to enroll in event');
 
-      const data = await response.json();
-      if (!data) {
-        throw new Error('No data returned');
-      }
-      return data;
-      } catch (error) {
-        console.log('Hubo un error en el login ', error);
-      }
+  const data = await response.json();
+  if (!data) throw new Error('No data returned');
+    Alert.alert("Inscripción realizada con éxito"); // Mostrar mensaje de éxito
+    return data;
+    } catch (error) {
+      console.log('Hubo un error al inscribirse', error);
+      Alert.alert("Error al inscribirse");
     }
+  };
 
-  useEffect( async () => {
+  useEffect(() => {
     const fetchAndSetEvent = async () => {
       const event = await fetchEvent();
-      if (event) 
-      {
-        setEvento(event);
-        console.log('fetchEvent: ', evento);
-      };
+      if (event) {
+        setEvento(event); // Asigna el evento al estado
+      }
     };
 
     fetchAndSetEvent();
+    console.log('detallesEvent: ', evento);
   }, [id_event]);
-  
+
   if (!evento) {
     return <Text>Cargando...</Text>;
-  }
-  else{
+  } else {
     return (
       <View style={styles.container}>
         <Text>{evento.name}</Text>
         <View>
           <Text>{evento.description}</Text>
           <Text>Empieza: {evento.start_date}</Text>
-          <Text>Duracion: {evento.duration_in_minutes}</Text>
+          <Text>Duración: {evento.duration_in_minutes} minutos</Text>
           <Text>Precio: {evento.price}</Text>
-          <Text>Location: {evento.Location}</Text>
-          <Text>Categoria: {evento.Category}</Text>
-          <Text>Tags: {evento.Tags}</Text>
-          <Button title="Inscribirse" onPress={() => inscribirse()}/>
+          <Text>Ubicación: {evento.location}</Text>
+          <Text>Categoría: {evento.category}</Text>
+          <Text>Tags: {evento.tags}</Text>
+          <Button title="Inscribirse" onPress={inscribirse} />
         </View>
       </View>
-    )
+    );
   }
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#ffffff',
-        },
-    logo: {
-        
-    },
+  container: {
+  flex: 1,
+  justifyContent: 'center',
+  alignItems: 'center',
+  backgroundColor: '#ffffff',
+  },
 });
-
+  
 export default DetallesEventoScreen;
