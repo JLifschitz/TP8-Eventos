@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
 import { View, Text, StyleSheet, FlatList, Button, Pressable} from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import DBDomain from '../constants/DBDomain.js';
 import {useUserContext} from '../context/userContext.js';
 import EventoCard from '../components/eventoCard.js';
@@ -43,9 +42,11 @@ function HomeScreen ({navigation}) {
         <Button title="Cargar nuevo evento" onPress={() => navigation.navigate('Formulario')}/>
         <FlatList
           data={eventos}
+          keyExtractor={(item) => item.id.toString()}
           renderItem={({item}) =>
             <Pressable onPress={() => navigation.navigate('DetallesEvento', {id_event: item.id})}>
               <EventoCard evento={item}/>
+              <Text>{item.id}</Text>
             </Pressable>
           }
         />

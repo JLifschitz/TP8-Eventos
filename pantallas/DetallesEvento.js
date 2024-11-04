@@ -2,89 +2,95 @@ import React, {useState, useEffect} from 'react';
 import { View, Text, StyleSheet, FlatList, Button} from 'react-native';
 import DBDomain from '../constants/DBDomain.js';
  
-function DetallesEventoScreen ({navigation, id_event}) {
-    const [evento, setEvento] = useState();
-    console.log('detallesEvents', evento);
+function DetallesEventoScreen ({navigation, route}) {
+  const [evento, setEvento] = useState();
+  const {id_event} = route.params;
+  
+  const fetchEvent = async () => {
+    const urlApi = `${DBDomain}/api/event/${id_event}`;
+    try {
+      const response = await fetch(urlApi);
+      if (!response.ok) throw new Error('Failed to fetch data');
 
-    
-    const fetchEvents = async () => {
-        const urlApi = `${DBDomain}/api/event/${id_event}`;
-        try {
-        const response = await fetch(urlApi);
-        if (!response.ok) throw new Error('Failed to fetch data');
+      const data = await response.json();
+      if (!data) throw new Error('No data returned');
 
-        const data = await response.json();
-        if (!data) throw new Error('No data returned');
+      return data;
+    } catch (error) {
+      console.log('Hubo un error en el fetchEvents', error);
+    }
+  };
 
-        console.log('data: ', data);
-        return data;
-        } catch (error) {
-        console.log('Hubo un error en el fetchEvents', error);
-        }
+  const inscribirse = async () => {
+
+    if (inscripciones >= capacidadMaxima) {
+      Alert.alert("No hay plazas");
+      return;
+  }
+    const urlApi = `${DBDomain}/api/event/${id_event}/enrollment`;
+    try {
+      const response = await fetch(urlApi, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id_event: id_event,
+          id_user: id_user,
+          description: '',
+          attended: false,
+          observations: '',
+          rating: '',
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to fetch data');
+      }
+
+      const data = await response.json();
+      if (!data) {
+        throw new Error('No data returned');
+      }
+      return data;
+      } catch (error) {
+        console.log('Hubo un error en el login ', error);
+      }
+    }
+
+  useEffect( async () => {
+    const fetchAndSetEvent = async () => {
+      const event = await fetchEvent();
+      if (event) 
+      {
+        setEvento(event);
+        console.log('fetchEvent: ', evento);
+      };
     };
 
-    const inscribirse = async () => {
-
-      if (inscripciones >= capacidadMaxima) {
-        Alert.alert("No hay plazas");
-        return;
-    }
-        const urlApi = `${DBDomain}/api/event/${id_event}/enrollment`;
-        try {
-            const response = await fetch(urlApi, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                id_event: id_event,
-                id_user: id_user,
-                description: '',
-                attended: false,
-                observations: '',
-                rating: '',
-              }),
-            });
-      
-            if (!response.ok) {
-              throw new Error('Failed to fetch data');
-            }
-      
-            const data = await response.json();
-            if (!data) {
-              throw new Error('No data returned');
-            }
-      
-            return data;
-          } catch (error) {
-            console.log('Hubo un error en el login ', error);
-          }
-    }
-
-    useEffect( async () => {
-        const event = await fetchEvents();
-        if (event.lentgh > 0) 
-        {
-          setEvento(event);
-          console.log('detallesEvents', evento);
-        }
-    }, []);
-
+    fetchAndSetEvent();
+  }, [id_event]);
+  
+  if (!evento) {
+    return <Text>Cargando...</Text>;
+  }
+  else{
     return (
-        <View style={styles.container}>
-            <Text>{evento.name}</Text>
-            <View>
-                <Text>{evento.description}</Text>
-                <Text>Empieza: {evento.start_date}</Text>
-                <Text>Duracion: {evento.duration_in_minutes}</Text>
-                <Text>Precio: {evento.price}</Text>
-                <Text>Location: {evento.Location}</Text>
-                <Text>Categoria: {evento.Category}</Text>
-                <Text>Tags: {evento.Tags}</Text>
-                <Button title="Inscribirse" onPress={() => inscribirse()}/>
-            </View>
+      <View style={styles.container}>
+        <Text>{evento.name}</Text>
+        <View>
+          <Text>{evento.description}</Text>
+          <Text>Empieza: {evento.start_date}</Text>
+          <Text>Duracion: {evento.duration_in_minutes}</Text>
+          <Text>Precio: {evento.price}</Text>
+          <Text>Location: {evento.Location}</Text>
+          <Text>Categoria: {evento.Category}</Text>
+          <Text>Tags: {evento.Tags}</Text>
+          <Button title="Inscribirse" onPress={() => inscribirse()}/>
         </View>
+      </View>
     )
+  }
 }
 
 const styles = StyleSheet.create({
