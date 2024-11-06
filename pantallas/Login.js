@@ -74,7 +74,6 @@ const LoginScreen = ({navigation}) => {
     const verifyUser = async () => {
       if (token !== null) {
         const userData = await verifyToken(token);
-        console.log('verify: ', userData);
         if (userData !== null) {
           setUsuario(userData);
         }

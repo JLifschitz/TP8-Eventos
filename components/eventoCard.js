@@ -6,16 +6,12 @@ const EventoCard = ({evento}) => {
     <View style={styles.container}>
         <Text style={styles.titulo}>{evento.name}</Text>
         <Text>Descripción: {evento.description}</Text>
-        <Text>categorias:</Text>
-        <FlatList
-            data={evento.category}
-            renderItem={({item}) => <Text>{evento.name}</Text>}
-        />
-        <Text>lugar:</Text>
-        <FlatList
-            data={evento.ubication}
-            renderItem={({item}) => <Text>{item.item}</Text>}
-        />
+        <Text>Categoria: {evento.category.name}</Text>
+        <Text>
+          Ubicacion:
+          {evento.ubicacion.name}
+          {evento.ubication.full_address}
+        </Text>
         <Text>Fecha: {evento.start_date}</Text>
         <Text>Duracion: {evento.duration_in_minutes}</Text>
         <Text>Precio: {evento.price}</Text>

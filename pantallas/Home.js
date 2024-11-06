@@ -32,9 +32,10 @@ function HomeScreen ({navigation}) {
     if (events.length > 0)
     {
       setEventos(events);
+      console.log('eventos: ', events);
     }
   }, []);
-
+  
   return (
     <View style={styles.container}>
       <Text>Bienvenido</Text>

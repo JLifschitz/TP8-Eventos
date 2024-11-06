@@ -28,14 +28,12 @@ const RegistrarseScreen = ({navigation}) => {
       if (!response.ok) {
         throw new Error('Failed to fetch data');
       }
-      console.log('response: ', response);
 
       const data = await response.json();
       if (!data) {
         throw new Error('No data returned');
       }
 
-      console.log('data: ', data);
       return data;
     } catch (error) {
       console.log('Hubo un error en el register', error);
@@ -44,9 +42,7 @@ const RegistrarseScreen = ({navigation}) => {
 
   const registrarse = async () => {
     const data = await registrarsePost();
-    console.log('RegistrarsePost: ', data);
     if (data !== null) {
-      console.log('RegistrarsePost: ', data);
       navigation.navigate('Login');
     }
   };
