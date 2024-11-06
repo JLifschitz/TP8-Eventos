@@ -33,10 +33,7 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       backgroundColor: '#ffffff',
     },
-    titulo: {
-      width: 100,
-      height: 100,
-    },
+   
 });
 
 export default EventoCard;

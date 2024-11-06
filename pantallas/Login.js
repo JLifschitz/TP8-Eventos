@@ -8,9 +8,9 @@ const LoginScreen = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [contraseña, setContraseña] = useState('');
   const {token, setToken, usuario, setUsuario} = useUserContext();
-  const urlApi = `${DBDomain}/api/user/login`;
-
+  
   const fetchToken = async () => {
+    const urlApi = `${DBDomain}/api/user/login`;
     try {
       const response = await fetch(urlApi, {
         method: 'POST',
@@ -22,6 +22,26 @@ const LoginScreen = ({navigation}) => {
           password: contraseña,
         }),
       });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch data');
+      }
+
+      const data = await response.json();
+      if (!data) {
+        throw new Error('No data returned');
+      }
+
+      return data;
+    } catch (error) {
+      console.log('Hubo un error en el login ', error);
+    }
+  };
+
+  const verifyToken = async () => {
+    const urlApi = `${DBDomain}/api/user/verify/${token}`;
+    try {
+      const response = await fetch(urlApi);
 
       if (!response.ok) {
         throw new Error('Failed to fetch data');
@@ -51,12 +71,20 @@ const LoginScreen = ({navigation}) => {
     setToken(null);
   }, []);
 
-  useEffect( () =>{
+  useEffect( async () =>{
   if (token !== null)
+  {
+    const data = await verifyToken(token);
+    if (data) setUsuario(data) 
+  }
+  }, [token]);
+
+  useEffect( () =>{
+  if (usuario !== null)
   {
     navigation.navigate('Home');
   }
-  }, [token]);
+  }, [usuario]);
 
 
   return (

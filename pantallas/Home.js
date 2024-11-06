@@ -46,7 +46,6 @@ function HomeScreen ({navigation}) {
           renderItem={({item}) =>
             <Pressable onPress={() => navigation.navigate('DetallesEvento', {id_event: item.id})}>
               <EventoCard evento={item}/>
-              <Text>{item.id}</Text>
             </Pressable>
           }
         />
