@@ -38,7 +38,7 @@ const LoginScreen = ({navigation}) => {
     }
   };
 
-  const verifyToken = async () => {
+  const verifyToken = async (token) => {
     const urlApi = `${DBDomain}/api/user/verify/${token}`;
     try {
       const response = await fetch(urlApi);
@@ -60,23 +60,28 @@ const LoginScreen = ({navigation}) => {
 
   const generateToken = async () => {
     const data = await fetchToken();
-    console.log('login: ', data);
     if (data && data.token) {
       setToken(data.token);
     }
   };
 
-
   useEffect( () =>{
     setToken(null);
+    setUsuario(null);
   }, []);
 
-  useEffect( async () =>{
-  if (token !== null)
-  {
-    const data = await verifyToken(token);
-    if (data) setUsuario(data) 
-  }
+  useEffect(() => {
+    const verifyUser = async () => {
+      if (token !== null) {
+        const userData = await verifyToken(token);
+        console.log('verify: ', userData);
+        if (userData !== null) {
+          setUsuario(userData);
+        }
+      }
+    };
+
+    verifyUser();
   }, [token]);
 
   useEffect( () =>{
@@ -84,7 +89,7 @@ const LoginScreen = ({navigation}) => {
   {
     navigation.navigate('Home');
   }
-  }, [usuario]);
+  }, [usuario, navigation]);
 
 
   return (

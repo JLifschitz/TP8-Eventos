@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, Button, Alert } from 'react-native';
 import DBDomain from '../constants/DBDomain.js';
-import useUserContext from '../context/userContext.js';
+import {useUserContext} from '../context/userContext.js';
 
 function DetallesEventoScreen({ navigation, route }) {
   const [evento, setEvento] = useState(null); // Cambiado a `null` para controlar mejor el estado de carga
@@ -36,14 +36,14 @@ function DetallesEventoScreen({ navigation, route }) {
   
   const urlApi = `${DBDomain}/api/event/${id_event}/enrollment`;
   try {
-  const response = await fetch(urlApi, {
+  const response = await fetch(urlApi, config, {
   method: 'POST',
   headers: {
   'Content-Type': 'application/json',
   },
   body: JSON.stringify({
   id_event: id_event,
-  id_user: usuario.id_user, // Asegúrate de que `id_user` esté definido o pasado como parámetro
+  id_user: usuario.id, // Asegúrate de que `id_user` esté definido o pasado como parámetro
   description: '',
   attended: false,
   observations: '',
@@ -54,7 +54,7 @@ function DetallesEventoScreen({ navigation, route }) {
 
   const data = await response.json();
   if (!data) throw new Error('No data returned');
-    Alert.alert("Inscripción realizada con éxito"); // Mostrar mensaje de éxito
+    console.log('inscripcion realizada con exito'); // Mostrar mensaje de éxito
     return data;
     } catch (error) {
       console.log('Hubo un error al inscribirse', error);
