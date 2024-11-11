@@ -14,13 +14,13 @@ function DetallesEventoScreen({ navigation, route }) {
   const fetchEvent = async () => {
     const urlApi = `${DBDomain}/api/event/${id_event}`;
     try {
-    const response = await fetch(urlApi);
-    if (!response.ok) throw new Error('Failed to fetch data');
+      const response = await fetch(urlApi);
+      if (!response.ok) throw new Error('Failed to fetch data');
 
-    const data = await response.json();
-    if (!data) throw new Error('No data returned');
+      const data = await response.json();
+      if (!data) throw new Error('No data returned');
 
-    return data;
+      return data;
     } catch (error) {
       console.log('Hubo un error en el fetchEvent', error);
     return null;
@@ -28,32 +28,28 @@ function DetallesEventoScreen({ navigation, route }) {
   };
 
   const inscribirse = async () => {
-  // Verificación de que el evento está cargado y tiene propiedades de capacidad
-  if (evento.inscripciones >= evento.capacidadMaxima) {
-  Alert.alert("No hay plazas disponibles");
-  return;
-  }
-  
-  const urlApi = `${DBDomain}/api/event/${id_event}/enrollment`;
-  try {
-  const response = await fetch(urlApi, config, {
-  method: 'POST',
-  headers: {
-  'Content-Type': 'application/json',
-  },
-  body: JSON.stringify({
-  id_event: id_event,
-  id_user: usuario.id, // Asegúrate de que `id_user` esté definido o pasado como parámetro
-  description: '',
-  attended: false,
-  observations: '',
-  rating: '',
-  }),
-  });
-  if (!response.ok) throw new Error('Failed to enroll in event');
+    const urlApi = `${DBDomain}/api/event/${id_event}/enrollment`;
+    try {
+      const response = await fetch(urlApi, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          id_event: id_event,
+          id_user: usuario.id,
+          description: '',
+          attended: false,
+          observations: '',
+          rating: '',
+        }),
+      });
+    if (!response.ok) throw new Error('Failed to enroll in event');
+    console.log('inscipcion: ', response);
 
-  const data = await response.json();
-  if (!data) throw new Error('No data returned');
+    const data = await response.json();
+    if (!data) throw new Error('No data returned');
     console.log('inscripcion realizada con exito'); // Mostrar mensaje de éxito
     return data;
     } catch (error) {
@@ -71,7 +67,6 @@ function DetallesEventoScreen({ navigation, route }) {
     };
 
     fetchAndSetEvent();
-    console.log('detallesEvent: ', evento);
   }, [id_event]);
 
   if (!evento) {
@@ -85,9 +80,10 @@ function DetallesEventoScreen({ navigation, route }) {
           <Text>Empieza: {evento.start_date}</Text>
           <Text>Duración: {evento.duration_in_minutes} minutos</Text>
           <Text>Precio: {evento.price}</Text>
-          <Text>Ubicación: {evento.location}</Text>
-          <Text>Categoría: {evento.category}</Text>
-          <Text>Tags: {evento.tags}</Text>
+          <Text>Ubicación: {evento.Location.name}</Text>
+          <Text>Direccion: {evento.Location.full_address}</Text>
+          <Text>Categoría: {evento.Category.name}</Text>
+          <Text>Tags: {evento.Tags.name}</Text>
           <Button title="Inscribirse" onPress={inscribirse} />
         </View>
       </View>

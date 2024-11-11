@@ -1,18 +1,21 @@
 import React, {useState, useEffect} from 'react';
-import { View, Text, StyleSheet, Button, TextInput } from 'react-native';
+import { View, Text, StyleSheet, Button, TextInput, Input } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import DBDomain from '../constants/DBDomain.js';
 import {useUserContext} from '../context/userContext.js';
 import ConfirmacionModal from '../components/Confirmacion.js';
 
 function FormularioScreen ({navigation}) {
-  const {usuario} = useUserContext();
+  const {token, usuario} = useUserContext();
+  const config = {
+    headers: { Authorization: `Bearer ${token}`}
+  }
 
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [categories, setCategories] = useState('');
+  const [categories, setCategories] = useState([]);
   const [id_event_category, setIdEventCategory] = useState('');
-  const [locations, setLocations] = useState('');
+  const [locations, setLocations] = useState([]);
   const [id_event_location, setIdEventLocation] = useState('');
   const [start_date, setStartDate] = useState('');
   const [duration_in_minutes, setDurationInMinutes] = useState('');
@@ -34,7 +37,7 @@ function FormularioScreen ({navigation}) {
   const fetchCategories = async () => {
     const urlApi = `${DBDomain}/api/event_categories`;
     try {
-      const response = await fetch(urlApi);
+      const response = await fetch(urlApi, config);
       if (!response.ok) throw new Error('Failed to fetch data');
 
       const data = await response.json();
@@ -65,17 +68,15 @@ function FormularioScreen ({navigation}) {
 
   useEffect(() => {
     const fetchAndSetCategories = async () => {
-      console.log('Categories (antes del fetch): ');
       const data = await fetchCategories();
-      console.log('Categories (despues del fetch): ', data );
+      console.log('Categories: ', data );
       if (data.length > 0) {
         setCategories(data);
       }
     };
     const fetchAndSetLocations = async () => {
-      console.log('Locations (antes del fetch): ');
       const data = await fetchLocations();
-      console.log('Locations (despues del fetch): ', data );
+      console.log('Locations: ', data );
       if (data.length > 0) {
         setLocations(data);
       }
@@ -112,6 +113,7 @@ function FormularioScreen ({navigation}) {
           style={styles.input}
         />
         <Picker
+          style={styles.picker}
           selectedValue={id_event_category}
           onValueChange={(itemValue) => setIdEventCategory(itemValue)}
         >
@@ -120,6 +122,7 @@ function FormularioScreen ({navigation}) {
           ))}
         </Picker>
         <Picker
+          style={styles.picker}
           selectedValue={id_event_location}
           onValueChange={(itemValue) => setIdEventLocation(itemValue)}
         >
@@ -139,7 +142,6 @@ function FormularioScreen ({navigation}) {
           value={duration_in_minutes}
           onChangeText={setDurationInMinutes}
           autoCapitalize="none"
-          secureTextEntry
           style={styles.input}
         />
         <TextInput
@@ -147,7 +149,6 @@ function FormularioScreen ({navigation}) {
           value={price}
           onChangeText={setPrice}
           autoCapitalize="none"
-          secureTextEntry
           style={styles.input}
         />
         <TextInput
@@ -155,7 +156,6 @@ function FormularioScreen ({navigation}) {
           value={max_assistance}
           onChangeText={setMaxAssistance}
           autoCapitalize="none"
-          secureTextEntry
           style={styles.input}
         />
       </View>
@@ -165,22 +165,30 @@ function FormularioScreen ({navigation}) {
   );
 };
 const styles = StyleSheet.create({
-   container: {
-     flex: 1,
-     justifyContent: 'center',
-     alignItems: 'center',
-     backgroundColor: '#ffffff',
-   },
-   inputContainer: {
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#ffffff',
+  },
+  inputContainer: {
     width: '80%',
     marginBottom: 20,
   },
-   input: {
+  input: {
     borderWidth: 1,
     borderColor: '#ccc',
     padding: 10,
     marginVertical: 10,
     borderRadius: 5,
   },
+  picker: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    padding: 10,
+    marginVertical: 10,
+    borderRadius: 5,
+    marginBottom: 20,
+  }
  });
 export default FormularioScreen;

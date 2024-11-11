@@ -38,7 +38,7 @@ function HomeScreen ({navigation}) {
   
   return (
     <View style={styles.container}>
-      <Text>Bienvenido</Text>
+      <Text>Eventos</Text>
       <View>
         <Button title="Cargar nuevo evento" onPress={() => navigation.navigate('Formulario')}/>
         <FlatList

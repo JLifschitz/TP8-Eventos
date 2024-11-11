@@ -1,15 +1,15 @@
 import React, { FC, useEffect, useState, useMemo } from 'react';
-import { StyleSheet, TouchableOpacity, View, Text, Modal, Dimensions, ScrollView } from 'react-native';
+import { StyleSheet, Button, View, Text, Modal, Dimensions, ScrollView } from 'react-native';
 import DBDomain from '../constants/DBDomain.js';
 import Success from './Success';
 
 
-const ConfirmacionModal = ({props}) => {
+const ConfirmacionModal = ({visible, setVisible, newEvent}) => {
   const windowWidth = Dimensions.get('window').width;
   const tamanoFuente = windowWidth / 14;
   
   function cerrarModal() {
-    props.setVisible(false);
+    setVisible(false);
   }
 
   const createEventPost = async () => {
@@ -21,16 +21,16 @@ const ConfirmacionModal = ({props}) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          name: props.newEvent.name,
-          description: props.newEvent.description,
-          id_event_category: props.newEvent.id_event_category,
-          id_event_location: props.newEvent.id_event_location,
-          start_date: props.newEvent.start_date,
-          duration_in_minutes: props.newEvent.duration_in_minutes,
-          price: props.newEvent.price,
+          name: newEvent.name,
+          description: newEvent.description,
+          id_event_category: newEvent.id_event_category,
+          id_event_location: newEvent.id_event_location,
+          start_date: newEvent.start_date,
+          duration_in_minutes: newEvent.duration_in_minutes,
+          price: newEvent.price,
           enable_for_enrollment: true,
-          max_assistance: props.newEvent.max_assistance,
-          id_creator_user: props.newEvent.id_creator_user,
+          max_assistance: newEvent.max_assistance,
+          id_creator_user: newEvent.id_creator_user,
         }),
       });
 
@@ -59,7 +59,7 @@ const ConfirmacionModal = ({props}) => {
   };
 
   return (
-    <Modal visible={props.visible} transparent={true} animationType="fade">
+    <Modal visible={visible} transparent={true} animationType="fade">
       <View style={styles.container}>
         <View style={styles.card}>
           <View style={styles.header}>

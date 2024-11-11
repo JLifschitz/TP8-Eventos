@@ -7,11 +7,7 @@ const EventoCard = ({evento}) => {
         <Text style={styles.titulo}>{evento.name}</Text>
         <Text>Descripción: {evento.description}</Text>
         <Text>Categoria: {evento.category.name}</Text>
-        <Text>
-          Ubicacion:
-          {evento.ubicacion.name}
-          {evento.ubication.full_address}
-        </Text>
+        <Text>Ubicacion: {evento.ubication.full_address}</Text>
         <Text>Fecha: {evento.start_date}</Text>
         <Text>Duracion: {evento.duration_in_minutes}</Text>
         <Text>Precio: {evento.price}</Text>
