@@ -111,8 +111,8 @@ const LoginScreen = ({navigation}) => {
           style={styles.input}
         />
       </View>
-      <Button title="Iniciar Sesión" onPress={generateToken} />
-      <Button title="¿No tienes cuenta?" onPress={() => navigation.navigate('Registrarse')} />
+      <Button style={styles.button} title="Iniciar Sesión" onPress={generateToken} />
+      <Button style={styles.button} title="¿No tienes cuenta?" onPress={() => navigation.navigate('Registrarse')} />
     </View>
   );
 };
@@ -134,6 +134,10 @@ const styles = StyleSheet.create({
     padding: 10,
     marginVertical: 10,
     borderRadius: 5,
+  },
+  button: {
+    padding: 10,
+    marginBottom: 10,
   },
 });
 

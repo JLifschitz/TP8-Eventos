@@ -43,7 +43,6 @@ function FormularioScreen ({navigation}) {
       const data = await response.json();
       if (!data) throw new Error('No data returned');
 
-      console.log('data: ', data);
       return data;
     } catch (error) {
       console.log('Hubo un error en el fetchCategories', error);
@@ -96,7 +95,7 @@ function FormularioScreen ({navigation}) {
   return (
     <View style={styles.container}>
       <ConfirmacionModal visible={visible} setVisible={setVisible} newEvent={newEvent}/>
-      <Text>Registro de Usuario</Text>
+      <Text>Crear nuevo evento</Text>
       <View style={styles.inputContainer}>
         <TextInput
           placeholder="Nombre"
@@ -140,21 +139,36 @@ function FormularioScreen ({navigation}) {
         <TextInput
           placeholder="Duracion"
           value={duration_in_minutes}
-          onChangeText={setDurationInMinutes}
+          onChangeText={(text) => {
+            if (/^\d*$/.test(text)) {
+              const parsedText = parseInt(text, 10);
+              setDurationInMinutes(parsedText);
+            }
+          }}
           autoCapitalize="none"
           style={styles.input}
         />
         <TextInput
           placeholder="Precio"
           value={price}
-          onChangeText={setPrice}
+          onChangeText={(text) => {
+            if (/^\d*$/.test(text)) {
+              const parsedText = parseInt(text, 10);
+              setPrice(parsedText);
+            }
+          }}
           autoCapitalize="none"
           style={styles.input}
         />
         <TextInput
           placeholder="Cantidad maxima de personas"
           value={max_assistance}
-          onChangeText={setMaxAssistance}
+          onChangeText={(text) => {
+            if (/^\d*$/.test(text)) {
+              const parsedText = parseInt(text, 10);
+              setMaxAssistance(parsedText);
+            }
+          }}
           autoCapitalize="none"
           style={styles.input}
         />     

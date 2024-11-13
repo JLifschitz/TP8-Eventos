@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { View, Text, StyleSheet, FlatList, Button, Pressable} from 'react-native';
+import { View, Text, StyleSheet, FlatList, Button, Pressable, ScrollView} from 'react-native';
 import DBDomain from '../constants/DBDomain.js';
 import {useUserContext} from '../context/userContext.js';
 import EventoCard from '../components/eventoCard.js';
@@ -32,15 +32,14 @@ function HomeScreen ({navigation}) {
     if (events.length > 0)
     {
       setEventos(events);
-      console.log('eventos: ', events);
     }
   }, []);
   
   return (
     <View style={styles.container}>
       <Text>Eventos</Text>
-      <View>
-        <Button title="Cargar nuevo evento" onPress={() => navigation.navigate('Formulario')}/>
+      <Button title="Cargar nuevo evento" onPress={() => navigation.navigate('Formulario')}/>
+      <ScrollView>
         <FlatList
           data={eventos}
           keyExtractor={(item) => item.id.toString()}
@@ -50,7 +49,7 @@ function HomeScreen ({navigation}) {
             </Pressable>
           }
         />
-      </View>
+      </ScrollView>
     </View>
   )
 }
