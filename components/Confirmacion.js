@@ -7,7 +7,34 @@ import Success from './Success';
 const ConfirmacionModal = ({visible, setVisible, newEvent}) => {
   const windowWidth = Dimensions.get('window').width;
   const tamanoFuente = windowWidth / 14;
-  
+  const [locations_, setLocations] = useState([]);
+  const [categorias_, setCategorias] = useState([]);
+
+  useEffect(() => {
+    locations();
+    categorias();
+  }, []);
+
+  const locations = async () => { 
+    try {
+      const response = await axios.get('http://10.144.1.38:3000/api/event-location', config);
+      setLocations(response.data);
+    } catch (error) {
+      Alert.alert('Error', error.response?.data?.message || 'Failed to load locations');
+    }
+  };
+
+  const categorias = async () => { 
+    try {
+      const response = await axios.get('http://10.144.1.38:3000/api/event-category', config);
+      setCategorias(response.data);
+    } catch (error) {
+      Alert.alert('Error', error.response?.data?.message || 'Failed to load categories');
+    }
+  };
+
+
+
   function cerrarModal() {
     setVisible(false);
   }
@@ -58,21 +85,31 @@ const ConfirmacionModal = ({visible, setVisible, newEvent}) => {
     }
   };
 
-  return (
-    <Modal visible={visible} transparent={true} animationType="fade">
-      <View style={styles.container}>
-        <View style={styles.card}>
-          <View style={styles.header}>
-            <Text>¿Estas seguro?</Text>
-          </View>
-          <View style={styles.botonesContainer}>
-            <Button title="Confirmar" onPress={crearEvento}/>
-            <Button title="Cancelar" onPress={cerrarModal}/>
-          </View>
-        </View>
-      </View>
-    </Modal>
-  );
+   return (
+     <Modal visible={visible} transparent={true} animationType="fade">
+       <View style={styles.container}>
+         <View style={styles.card}>
+           <View style={styles.header}>
+             <Text>¿Estas seguro?</Text>
+           </View>
+           <Text>Nombre: {newEvent.name}</Text>
+            <Text>Descripción: {newEvent.description}</Text>
+            <Text>Categoría: {newEvent.id_event_category}</Text>
+            <Text>Ubicación: {newEvent.id_event_location}</Text>
+            <Text>Fecha de Inicio: {newEvent.start_date}</Text>
+            <Text>Duración: {newEvent.duration_in_minutes}</Text>
+            <Text>Precio: {newEvent.price}</Text>
+            <Text>Máxima asistencia: {newEvent.max_assistance}</Text>
+            <Text>Estado de Inscripción: {true ? 'Habilitada' : 'Deshabilitada'}</Text>
+           <View style={styles.botonesContainer}>
+             <Button title="Confirmar" onPress={crearEvento}/>
+             <Button title="Cancelar" onPress={cerrarModal}/>
+           </View>
+         </View>
+       </View>
+     </Modal>
+   );
+
 };
 
 const styles = StyleSheet.create({

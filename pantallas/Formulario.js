@@ -157,8 +157,10 @@ function FormularioScreen ({navigation}) {
           onChangeText={setMaxAssistance}
           autoCapitalize="none"
           style={styles.input}
-        />
+        />     
+        <Text>buenas</Text>
       </View>
+ 
       <Button title="Confirmar" onPress={abrirModal}/>
       <Button title="Cancelar" onPress={() => navigation.navigate('Home')}/>
     </View>
