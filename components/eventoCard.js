@@ -13,19 +13,21 @@ const EventoCard = ({evento}) => {
         <Text>Precio: {evento.price}</Text>
         <Text>Cupos disponibles: {evento.enabled_for_enrollment}</Text>
         <Text>Cantidad maxima de personas: {evento.max_assistance}</Text>
-        <Text>Creador: {evento.user.username}</Text>
+        <Text>Creador: {evento.user.first_name} {evento.user.last_name}</Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: '#ffffff',
-    },
-   
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    marginBottom: 10,
+    backgroundColor: '#ffffff',
+  },
+  titulo: {
+    fontSize: 20,
+  }
 });
 
 export default EventoCard;

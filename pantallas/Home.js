@@ -37,7 +37,7 @@ function HomeScreen ({navigation}) {
   
   return (
     <View style={styles.container}>
-      <Text>Eventos</Text>
+      <Text style={styles.titulo}>Eventos</Text>
       <Button title="Cargar nuevo evento" onPress={() => navigation.navigate('Formulario')}/>
       <ScrollView>
         <FlatList
@@ -61,8 +61,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#ffffff',
   },
-  logo: {
-    
+  titulo: {
+    fontSize: 20,
   },
 });
 

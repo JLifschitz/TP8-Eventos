@@ -93,7 +93,7 @@ const LoginScreen = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <Text>Inicio Sesión</Text>
+      <Text style={styles.titulo}>Inicio Sesión</Text>
       <View style={styles.inputContainer}>
         <TextInput
           placeholder="Email"
@@ -138,6 +138,9 @@ const styles = StyleSheet.create({
   button: {
     padding: 10,
     marginBottom: 10,
+  },
+  titulo: {
+    fontSize: 20,
   },
 });
 

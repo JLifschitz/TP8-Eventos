@@ -58,7 +58,6 @@ function FormularioScreen ({navigation}) {
       const data = await response.json();
       if (!data) throw new Error('No data returned');
 
-      console.log('data: ', data);
       return data;
     } catch (error) {
       console.log('Hubo un error en el fetchLocations', error);
@@ -68,14 +67,12 @@ function FormularioScreen ({navigation}) {
   useEffect(() => {
     const fetchAndSetCategories = async () => {
       const data = await fetchCategories();
-      console.log('Categories: ', data );
       if (data.length > 0) {
         setCategories(data);
       }
     };
     const fetchAndSetLocations = async () => {
       const data = await fetchLocations();
-      console.log('Locations: ', data );
       if (data.length > 0) {
         setLocations(data);
       }
@@ -139,40 +136,27 @@ function FormularioScreen ({navigation}) {
         <TextInput
           placeholder="Duracion"
           value={duration_in_minutes}
-          onChangeText={(text) => {
-            if (/^\d*$/.test(text)) {
-              const parsedText = parseInt(text, 10);
-              setDurationInMinutes(parsedText);
-            }
-          }}
+          onChangeText={setDurationInMinutes}
+          keyboardType="numeric"
           autoCapitalize="none"
           style={styles.input}
         />
         <TextInput
           placeholder="Precio"
           value={price}
-          onChangeText={(text) => {
-            if (/^\d*$/.test(text)) {
-              const parsedText = parseInt(text, 10);
-              setPrice(parsedText);
-            }
-          }}
+          onChangeText={setPrice}
+          keyboardType="numeric"
           autoCapitalize="none"
           style={styles.input}
         />
         <TextInput
           placeholder="Cantidad maxima de personas"
           value={max_assistance}
-          onChangeText={(text) => {
-            if (/^\d*$/.test(text)) {
-              const parsedText = parseInt(text, 10);
-              setMaxAssistance(parsedText);
-            }
-          }}
+          onChangeText={setMaxAssistance}
+          keyboardType="numeric"
           autoCapitalize="none"
           style={styles.input}
         />     
-        <Text>buenas</Text>
       </View>
  
       <Button title="Confirmar" onPress={abrirModal}/>

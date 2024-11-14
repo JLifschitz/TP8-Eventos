@@ -46,11 +46,11 @@ function DetallesEventoScreen({ navigation, route }) {
         }),
       });
     if (!response.ok) throw new Error('Failed to enroll in event');
-    console.log('inscipcion: ', response);
 
     const data = await response.json();
     if (!data) throw new Error('No data returned');
     console.log('inscripcion realizada con exito'); // Mostrar mensaje de éxito
+    
     return data;
     } catch (error) {
       console.log('Hubo un error al inscribirse', error);
@@ -86,6 +86,7 @@ function DetallesEventoScreen({ navigation, route }) {
           <Text>Tags: {evento.Tags.name}</Text>
           <Button title="Inscribirse" onPress={inscribirse} />
         </View>
+        <Button title="Volver" onPress={navigation.navigate('Home')} />
       </View>
     );
   }

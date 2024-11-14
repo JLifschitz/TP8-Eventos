@@ -49,7 +49,7 @@ const RegistrarseScreen = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <Text>Registro de Usuario</Text>
+      <Text style={styles.titulo}>Registro de Usuario</Text>
       <View style={styles.inputContainer}>
         <TextInput
           placeholder="Primer nombre"
@@ -104,6 +104,9 @@ const styles = StyleSheet.create({
     padding: 10,
     marginVertical: 10,
     borderRadius: 5,
+  },
+  titulo: {
+    fontSize: 20,
   },
 });
 

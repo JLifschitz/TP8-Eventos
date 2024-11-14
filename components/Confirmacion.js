@@ -1,11 +1,13 @@
 import React, { FC, useEffect, useState, useMemo } from 'react';
 import { StyleSheet, Button, View, Text, Modal, Dimensions, ScrollView } from 'react-native';
 import {useUserContext} from '../context/userContext.js';
+import {useNavigation} from '@react-navigation/native';
 import DBDomain from '../constants/DBDomain.js';
 import Success from './Success';
 
 
-const ConfirmacionModal = ({visible, setVisible, newEvent, navigation}) => {
+const ConfirmacionModal = ({visible, setVisible, newEvent}) => {
+  const navigation = useNavigation();
   const windowWidth = Dimensions.get('window').width;
   const tamanoFuente = windowWidth / 14;
   const {token, usuario} = useUserContext();
@@ -48,13 +50,16 @@ const ConfirmacionModal = ({visible, setVisible, newEvent, navigation}) => {
 
       return data;
     } catch (error) {
-      console.log('Hubo un error en el register', error);
+      console.log('Hubo un error en el crear evento', error);
     }
   };
 
   const crearEvento = async () => {
     const data = await createEventPost();
     if (data) {
+      console.log('success', data)
+      cerrarModal;
+      alert(Success);
       navigation.navigate('Home');
     }
   };
