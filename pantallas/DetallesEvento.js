@@ -27,6 +27,33 @@ function DetallesEventoScreen({ navigation, route }) {
     }
   };
 
+  //   // Función para inscribirse al evento.
+  //   const inscribirse = async () => {
+  //     const urlApi = `${DBDomain}/api/event/${id_event}/enrollment`;
+  //     try {
+  //         const response = await axios.post(urlApi, {
+  //             id_event: id_event,
+  //             id_user: usuario.id,
+  //             description: '',
+  //             attended: 0,
+  //             observations: '',
+  //             rating: '',
+  //         }, {
+  //             headers: { Authorization: `Bearer ${token}` },
+  //         });
+
+  //         if (!response.data) {
+  //             throw new Error('No data returned');
+  //         }
+
+  //         setInscripciones(prev => prev + 1);
+  //         setUsuarioInscripto(true);  // El usuario ahora está inscrito.
+  //         Alert.alert("Inscripción exitosa!");
+  //     } catch (error) {
+  //         Alert.alert("Error", `Hubo un error en la inscripción: ${error.message}`);
+  //     }
+  // };
+
   const inscribirse = async () => {
     const urlApi = `${DBDomain}/api/event/${id_event}/enrollment`;
     try {
@@ -40,7 +67,7 @@ function DetallesEventoScreen({ navigation, route }) {
           id_event: id_event,
           id_user: usuario.id,
           description: '',
-          attended: false,
+          attended: 0,
           observations: '',
           rating: '',
         }),
@@ -50,7 +77,7 @@ function DetallesEventoScreen({ navigation, route }) {
 
       const data = await response.json();
       if (!data) throw new Error('No data returned');
-      console.log('inscripcion realizada con exito'); // Mostrar mensaje de éxito
+      alert('inscripcion realizada con exito'); // Mostrar mensaje de éxito
     
       return data;
     } catch (error) {
