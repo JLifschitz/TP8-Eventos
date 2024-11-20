@@ -6,7 +6,7 @@ import DBDomain from '../constants/DBDomain.js';
 import Success from './Success';
 
 
-const ConfirmacionModal = ({visible, setVisible, newEvent}) => {
+const ConfirmacionModal = ({visible, setVisible, newEvent, OnPressNavigation}) => {
   const navigation = useNavigation();
   const windowWidth = Dimensions.get('window').width;
   const tamanoFuente = windowWidth / 14;
@@ -58,9 +58,9 @@ const ConfirmacionModal = ({visible, setVisible, newEvent}) => {
     const data = await createEventPost();
     if (data) {
       console.log('success', data)
-      cerrarModal;
+      cerrarModal();
       alert(Success);
-      navigation.navigate('Home');
+      OnPressNavigation({ updateEvents: true });
     }
   };
 

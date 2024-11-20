@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { View, Text, StyleSheet, FlatList, Button, Pressable, ScrollView} from 'react-native';
+import { useRoute } from '@react-navigation/native';
 import DBDomain from '../constants/DBDomain.js';
 import {useUserContext} from '../context/userContext.js';
 import EventoCard from '../components/eventoCard.js';
@@ -27,6 +28,8 @@ function HomeScreen ({navigation}) {
     }
   };
 
+  const route = useRoute();
+
   useEffect( async () => {
     const events = await fetchEvents();
     if (events.length > 0)
@@ -35,6 +38,17 @@ function HomeScreen ({navigation}) {
     }
   }, []);
   
+
+  useEffect(() => {
+    if (route.params?.updateEvents) {
+      const reloadEvents = async () => {
+        const events = await fetchEvents();
+        setEventos(events); // Actualiza los eventos después de la creación
+      };
+      reloadEvents();
+    }
+  }, [route.params?.updateEvents]); 
+
   return (
     <View style={styles.container}>
       <Text style={styles.titulo}>Eventos</Text>

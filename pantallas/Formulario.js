@@ -64,6 +64,10 @@ function FormularioScreen ({navigation}) {
     }
   };
 
+  const OnPressNavigation = () => {
+    navigation.navigate('Home');
+  }
+
   useEffect(() => {
     const fetchAndSetCategories = async () => {
       const data = await fetchCategories();
@@ -91,7 +95,7 @@ function FormularioScreen ({navigation}) {
 
   return (
     <View style={styles.container}>
-      <ConfirmacionModal visible={visible} setVisible={setVisible} newEvent={newEvent}/>
+      <ConfirmacionModal visible={visible} setVisible={setVisible} newEvent={newEvent} OnPressNavigation={OnPressNavigation}/>
       <Text>Crear nuevo evento</Text>
       <View style={styles.inputContainer}>
         <TextInput

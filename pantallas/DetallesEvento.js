@@ -16,7 +16,7 @@ function DetallesEventoScreen({ navigation, route }) {
     try {
       const response = await fetch(urlApi);
       if (!response.ok) throw new Error('Failed to fetch data');
-
+      
       const data = await response.json();
       if (!data) throw new Error('No data returned');
 
@@ -45,13 +45,14 @@ function DetallesEventoScreen({ navigation, route }) {
           rating: '',
         }),
       });
-    if (!response.ok) throw new Error('Failed to enroll in event');
+      console.log('inscripcion: ', response); 
+      if (!response.ok) throw new Error('Failed to enroll in event');
 
-    const data = await response.json();
-    if (!data) throw new Error('No data returned');
-    console.log('inscripcion realizada con exito'); // Mostrar mensaje de éxito
+      const data = await response.json();
+      if (!data) throw new Error('No data returned');
+      console.log('inscripcion realizada con exito'); // Mostrar mensaje de éxito
     
-    return data;
+      return data;
     } catch (error) {
       console.log('Hubo un error al inscribirse', error);
       Alert.alert("Error al inscribirse");
@@ -86,7 +87,7 @@ function DetallesEventoScreen({ navigation, route }) {
           <Text>Tags: {evento.Tags.name}</Text>
           <Button title="Inscribirse" onPress={inscribirse} />
         </View>
-        <Button title="Volver" onPress={navigation.navigate('Home')} />
+        <Button title="Volver" onPress={() => navigation.navigate('Home')} />
       </View>
     );
   }
