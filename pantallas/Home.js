@@ -1,11 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import { View, Text, StyleSheet, FlatList, Button, Pressable, ScrollView} from 'react-native';
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import DBDomain from '../constants/DBDomain.js';
 import {useUserContext} from '../context/userContext.js';
 import EventoCard from '../components/eventoCard.js';
  
 function HomeScreen ({navigation}) {
+  const route = useRoute();
   const [eventos, setEventos] = useState();
   const {token} = useUserContext();
   const config = {
@@ -28,9 +29,8 @@ function HomeScreen ({navigation}) {
     }
   };
 
-  const route = useRoute();
-
   useEffect( async () => {
+    setEventos([]);
     const events = await fetchEvents();
     if (events.length > 0)
     {
@@ -38,7 +38,6 @@ function HomeScreen ({navigation}) {
     }
   }, []);
   
-
   useEffect(() => {
     if (route.params?.updateEvents) {
       const reloadEvents = async () => {
@@ -52,18 +51,18 @@ function HomeScreen ({navigation}) {
   return (
     <View style={styles.container}>
       <Text style={styles.titulo}>Eventos</Text>
-      <Button title="Cargar nuevo evento" onPress={() => navigation.navigate('Formulario')}/>
-      <ScrollView>
+      <ScrollView style={styles.scroll}>
         <FlatList
           data={eventos}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({item}) =>
-            <Pressable onPress={() => navigation.navigate('DetallesEvento', {id_event: item.id})}>
+          <Pressable onPress={() => navigation.navigate('DetallesEvento', {id_event: item.id})}>
               <EventoCard evento={item}/>
             </Pressable>
           }
         />
       </ScrollView>
+      <Button style={styles.boton} title="Cargar nuevo evento" onPress={() => navigation.navigate('Formulario')}/>
     </View>
   )
 }
@@ -75,8 +74,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#ffffff',
   },
+  scroll: {
+    height: 100,
+  },
   titulo: {
     fontSize: 20,
+  },
+  boton: {
+    marginTop: 5,
   },
 });
 

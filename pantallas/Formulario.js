@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { View, Text, StyleSheet, Button, TextInput, Input } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import DBDomain from '../constants/DBDomain.js';
@@ -6,6 +7,7 @@ import {useUserContext} from '../context/userContext.js';
 import ConfirmacionModal from '../components/Confirmacion.js';
 
 function FormularioScreen ({navigation}) {
+  const route = useRoute();
   const {token, usuario} = useUserContext();
   const config = {
     headers: { Authorization: `Bearer ${token}`}
@@ -17,7 +19,7 @@ function FormularioScreen ({navigation}) {
   const [id_event_category, setIdEventCategory] = useState('');
   const [locations, setLocations] = useState([]);
   const [id_event_location, setIdEventLocation] = useState('');
-  const [start_date, setStartDate] = useState('');
+  const [start_date, setStartDate] = useState(new Date());
   const [duration_in_minutes, setDurationInMinutes] = useState('');
   const [price, setPrice] = useState('');
   const [max_assistance, setMaxAssistance] = useState('');
@@ -64,9 +66,9 @@ function FormularioScreen ({navigation}) {
     }
   };
 
-  const OnPressNavigation = () => {
-    navigation.navigate('Home');
-  }
+  const OnPressNavigation = (params) => {
+    navigation.navigate('Home', params);
+  };
 
   useEffect(() => {
     const fetchAndSetCategories = async () => {
