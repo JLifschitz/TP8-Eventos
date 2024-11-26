@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Button, FlatList, Alert } from 'react-native';
 import DBDomain from '../constants/DBDomain.js';
+import {useUserContext} from '../context/userContext.js';
 
-const DetalleEventoAdminScreen = ({ navigation, route }) => {
+function DetalleEventoAdminScreen ({ navigation, route }) {
+    const {usuario} = useUserContext();
     const { id_event } = route.params;
     const [evento, setEvento] = useState();
     const [participantes, setParticipantes] = useState([]);
@@ -21,7 +23,7 @@ const DetalleEventoAdminScreen = ({ navigation, route }) => {
     };
 
     const fetchParticipantes = async () => {
-        const urlApi = `${DBDomain}/api/event/${id_event}/participants`;
+        const urlApi = `${DBDomain}/api/event/${id_event}/enrollment`;
         try {
             const response = await fetch(urlApi);
             if (!response.ok) throw new Error('Failed to fetch data');
@@ -33,7 +35,7 @@ const DetalleEventoAdminScreen = ({ navigation, route }) => {
         }
     };
 
-    const eliminarEvento = async () => {
+    const DeleteEvento = async () => {
         const urlApi = `${DBDomain}/api/event/${id_event}`;
         try {
             const response = await fetch(urlApi, {
@@ -49,29 +51,44 @@ const DetalleEventoAdminScreen = ({ navigation, route }) => {
         }
     };
 
+    const eliminarEvento = async () =>
+    {
+      const data = await DeleteEvento();
+      navigation.navigate('PanelAdmin');
+    }
+
     useEffect(() => {
         fetchEvento();
         fetchParticipantes();
     }, []);
 
-    return (
-        <View style={styles.container}>
-            {evento && (
-                <>
-                    <Text>Evento: {evento.name}</Text>
-                    <Text>Descripción del evento: {evento.description}</Text>
-                    <Text>Fecha: {evento.start_date}</Text>
-                    <Button title="Eliminar Evento" onPress={eliminarEvento} />
-                    <Text>Participantes:</Text>
-                    <FlatList
-                        data={participantes}
-                        renderItem={({ item }) => <Text>{item.name}</Text>}
-                        keyExtractor={item => item.id.toString()}
-                    />
-                </>
-            )}
-        </View>
-    );
+    if (!evento) {
+        return <Text>Cargando...</Text>;
+    } else {
+        return (
+            <View style={styles.container}>
+            <Text>{evento.name}</Text>
+            <View>
+                <Text>{evento.description}</Text>
+                <Text>Empieza: {evento.start_date}</Text>
+                <Text>Duración: {evento.duration_in_minutes} minutos</Text>
+                <Text>Precio: {evento.price}</Text>
+                <Text>Ubicación: {evento.Location.name}</Text>
+                <Text>Direccion: {evento.Location.full_address}</Text>
+                <Text>Categoría: {evento.Category.name}</Text>
+                <Text>Tags: {evento.Tags.name}</Text>
+            </View>
+            <FlatList
+                data={participantes}
+                renderItem={({ item }) => <Text>{item.name}</Text>}
+                keyExtractor={item => item.id.toString()}
+            />
+            <Button title="Editar Evento" onPress={() => navigation.navigate('EditarEvento')} />
+            <Button title="Eliminar Evento" onPress={eliminarEvento} />
+            <Button title="Volver" onPress={() => navigation.navigate('PanelAdmin')} />
+            </View>
+        );
+    }
 };
 
 const styles = StyleSheet.create({

@@ -7,15 +7,15 @@ import EventoCard from '../components/eventoCard.js';
  
 function PanelAdminScreen ({navigation}) {
   const route = useRoute();
-  const [eventos, setEventos] = useState();
+  const [eventosProximos, setEventosProximos] = useState([]);
+  const [eventosPasados, setEventosPasados] = useState([]);
   const {token, usuario} = useUserContext();
   const config = {
     headers: { Authorization: `Bearer ${token}`}
   }
-  
-  const fetchEvents = async () => {
-    const now = new Date().toISOString();
-    const urlApi = `${DBDomain}/api/event?start_date=${now}`;
+
+  const fetchEventos = async () => {
+    const urlApi = `${DBDomain}/api/event`;
     try {
       const response = await fetch(urlApi, config);
       if (!response.ok) throw new Error('Failed to fetch data');
@@ -23,26 +23,43 @@ function PanelAdminScreen ({navigation}) {
       const data = await response.json();
       if (!data) throw new Error('No data returned');
 
-      return data;
+      const now = Date.now();
+      const proximos = data.filter(evento => new Date(evento.start_date) > now);
+      const pasados = data.filter(evento => new Date(evento.start_date) <= now);
+
+      setEventosProximos(proximos);
+      setEventosPasados(pasados);
     } catch (error) {
-      console.log('Hubo un error en el fetchEvents', error);
+      console.log('Error fetching eventos', error);
+    }
+  };
+
+  const eliminarEvento = async (id_event) => {
+    const urlApi = `${DBDomain}/api/event/${id_event}`;
+    try {
+        const response = await fetch(urlApi, {
+          method: 'DELETE',
+        });
+
+        if (!response.ok) throw new Error('Failed to delete event');
+
+        Alert.alert("Éxito", "Evento eliminado correctamente");
+        fetchEventos(); // Refresca el listado
+    } catch (error) {
+        console.log('Error eliminando evento', error);
     }
   };
 
   useEffect( async () => {
-    setEventos([]);
-    const events = await fetchEvents();
-    if (events.length > 0)
-    {
-      setEventos(events);
-    }
+    setEventosProximos([]);
+    setEventosPasados([]);
+    const events = await fetchEventos();
   }, []);
   
   useEffect(() => {
     if (route.params?.updateEvents) {
       const reloadEvents = async () => {
-        const events = await fetchEvents();
-        setEventos(events); // Actualiza los eventos después de la creación
+        const events = await fetchEventos();
       };
       reloadEvents();
     }
@@ -50,24 +67,32 @@ function PanelAdminScreen ({navigation}) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.titulo}>Eventos</Text>
+      <Text style={styles.titulo}>Eventos Próximos</Text>
       <ScrollView style={styles.scroll}>
         <FlatList
-          data={eventos}
+          data={eventosProximos}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({item}) =>
-          <Pressable onPress={() => navigation.navigate('DetallesEvento', {id_event: item.id})}>
+          <Pressable onPress={() => navigation.navigate('DetallesEventoAdmin', {id_event: item.id})}>
               <EventoCard evento={item}/>
             </Pressable>
           }
         />
       </ScrollView>
-      <Button style={styles.boton} title="Cargar nuevo evento" onPress={() => navigation.navigate('Formulario')}/>
-      {usuario.id === 71 ? (
-        <Button style={styles.boton} title="Ver todos los eventos" onPress={() => navigation.navigate("Panel")} />
-      ) : null}
+
+      <Text style={styles.titulo}>Eventos Pasados</Text>
+      <ScrollView style={styles.scroll}>
+        <FlatList
+          data={eventosPasados}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({item}) =>
+            <EventoCard evento={item}/>
+          }
+        />
+      </ScrollView>
+      <Button title="Volver" onPress={() => navigation.navigate('Home')} />
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({

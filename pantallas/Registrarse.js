@@ -3,7 +3,7 @@ import { View, StyleSheet, Text, TextInput, Button } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import DBDomain from '../constants/DBDomain.js';
 
-const RegistrarseScreen = ({navigation}) => {
+function RegistrarseScreen ({navigation}) {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');

@@ -64,7 +64,7 @@ function HomeScreen ({navigation}) {
       </ScrollView>
       <Button style={styles.boton} title="Cargar nuevo evento" onPress={() => navigation.navigate('Formulario')}/>
       {usuario.id === 71 ? (
-        <Button style={styles.boton} title="Ver todos los eventos" onPress={() => navigation.navigate("Panel")} />
+        <Button style={styles.boton} title="Ver todos los eventos" onPress={() => navigation.navigate("PanelAdmin")} />
       ) : null}
     </View>
   )

@@ -26,7 +26,7 @@ const Navigation = () => {
           <Stack.Screen name="Formulario" component={FormularioScreen}/>
           <Stack.Screen name="DetallesEvento" component={DetallesEventoScreen}/>
           <Stack.Screen name="PanelAdmin" component={PanelAdminScreen}/>
-          <Stack.Screen name="DetallesEventosAdmin" component={DetalleEventoAdminScreen}/>
+          <Stack.Screen name="DetallesEventoAdmin" component={DetalleEventoAdminScreen}/>
         </Stack.Navigator>
       </NavigationContainer>
     </UserProvider>

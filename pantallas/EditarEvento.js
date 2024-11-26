@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 import DBDomain from '../constants/DBDomain.js';
 
-const ListadoParticipantesScreen = ({ route }) => {
+function EditarEventoScreen ({ route }) {
     const { id_event } = route.params;
     const [participantes, setParticipantes] = useState([]);
 
@@ -43,4 +43,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ListadoParticipantesScreen;
+export default EditarEventoScreen;

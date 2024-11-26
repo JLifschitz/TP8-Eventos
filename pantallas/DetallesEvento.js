@@ -11,7 +11,7 @@ function DetallesEventoScreen({ navigation, route }) {
     headers: { Authorization: `Bearer ${token}`}
   }
 
-  const fetchEvent = async () => {
+  const fetchEvento = async () => {
     const urlApi = `${DBDomain}/api/event/${id_event}`;
     try {
       const response = await fetch(urlApi);
@@ -66,7 +66,7 @@ function DetallesEventoScreen({ navigation, route }) {
 
   useEffect(() => {
     const fetchAndSetEvent = async () => {
-      const event = await fetchEvent();
+      const event = await fetchEvento();
       if (event) {
         setEvento(event); // Asigna el evento al estado
       }

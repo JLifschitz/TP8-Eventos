@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import DBDomain from '../constants/DBDomain.js';
 import {useUserContext} from '../context/userContext.js';
 
-const LoginScreen = ({navigation}) => {
+function LoginScreen ({navigation}) {
   const [email, setEmail] = useState('');
   const [contraseña, setContraseña] = useState('');
   const {token, setToken, usuario, setUsuario} = useUserContext();
