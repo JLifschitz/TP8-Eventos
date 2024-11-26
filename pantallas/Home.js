@@ -8,7 +8,7 @@ import EventoCard from '../components/eventoCard.js';
 function HomeScreen ({navigation}) {
   const route = useRoute();
   const [eventos, setEventos] = useState();
-  const {token} = useUserContext();
+  const {token, usuario} = useUserContext();
   const config = {
     headers: { Authorization: `Bearer ${token}`}
   }
@@ -46,7 +46,7 @@ function HomeScreen ({navigation}) {
       };
       reloadEvents();
     }
-  }, [route.params?.updateEvents]); 
+  }, [route.params?.updateEvents]);
 
   return (
     <View style={styles.container}>
@@ -63,6 +63,9 @@ function HomeScreen ({navigation}) {
         />
       </ScrollView>
       <Button style={styles.boton} title="Cargar nuevo evento" onPress={() => navigation.navigate('Formulario')}/>
+      {usuario.id === 71 ? (
+        <Button style={styles.boton} title="Ver todos los eventos" onPress={() => navigation.navigate("Panel")} />
+      ) : null}
     </View>
   )
 }

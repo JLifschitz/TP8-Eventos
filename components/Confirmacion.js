@@ -60,7 +60,7 @@ const ConfirmacionModal = ({visible, setVisible, newEvent, OnPressNavigation}) =
       console.log('success', data)
       cerrarModal();
       alert(Success);
-      OnPressNavigation({ updateEvents: true });
+      OnPressNavigation();
     }
   };
 

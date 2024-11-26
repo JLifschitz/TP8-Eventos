@@ -1,17 +1,14 @@
-import React, {useState, useEffect} from 'react';
-import { useNavigation, useRoute } from '@react-navigation/native';
-import { View, Text, StyleSheet, Button, TextInput, Input } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, Button, TextInput, Picker } from 'react-native';
 import DBDomain from '../constants/DBDomain.js';
-import {useUserContext} from '../context/userContext.js';
+import { useUserContext } from '../context/userContext.js';
 import ConfirmacionModal from '../components/Confirmacion.js';
 
-function FormularioScreen ({navigation}) {
-  const route = useRoute();
-  const {token, usuario} = useUserContext();
+function FormularioScreen({ navigation }) {
+  const { token, usuario } = useUserContext();
   const config = {
-    headers: { Authorization: `Bearer ${token}`}
-  }
+    headers: { Authorization: `Bearer ${token}` }
+  };
 
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -19,35 +16,34 @@ function FormularioScreen ({navigation}) {
   const [id_event_category, setIdEventCategory] = useState('');
   const [locations, setLocations] = useState([]);
   const [id_event_location, setIdEventLocation] = useState('');
-  const [start_date, setStartDate] = useState(new Date());
+  const [start_date, setStartDate] = useState('');
   const [duration_in_minutes, setDurationInMinutes] = useState('');
   const [price, setPrice] = useState('');
   const [max_assistance, setMaxAssistance] = useState('');
+  const [errors, setErrors] = useState({});
+  const [visible, setVisible] = useState(false);
 
   let newEvent = {
-    name: name,
-    description: description,
-    id_event_category: id_event_category,
-    id_event_location: id_event_location,
-    start_date: start_date,
-    duration_in_minutes: duration_in_minutes,
-    price: price,
-    max_assistance: max_assistance,
+    name,
+    description,
+    id_event_category,
+    id_event_location,
+    start_date,
+    duration_in_minutes,
+    price,
+    max_assistance,
     id_creator_user: usuario.id,
-  }
+  };
 
   const fetchCategories = async () => {
     const urlApi = `${DBDomain}/api/event_categories`;
     try {
       const response = await fetch(urlApi, config);
       if (!response.ok) throw new Error('Failed to fetch data');
-
       const data = await response.json();
-      if (!data) throw new Error('No data returned');
-
-      return data;
+      setCategories(data);
     } catch (error) {
-      console.log('Hubo un error en el fetchCategories', error);
+      console.log('Error fetching categories:', error);
     }
   };
 
@@ -56,43 +52,74 @@ function FormularioScreen ({navigation}) {
     try {
       const response = await fetch(urlApi);
       if (!response.ok) throw new Error('Failed to fetch data');
-
       const data = await response.json();
-      if (!data) throw new Error('No data returned');
-
-      return data;
+      setLocations(data);
     } catch (error) {
-      console.log('Hubo un error en el fetchLocations', error);
+      console.log('Error fetching locations:', error);
     }
   };
 
-  const OnPressNavigation = (params) => {
-    navigation.navigate('Home', params);
-  };
-
   useEffect(() => {
-    const fetchAndSetCategories = async () => {
-      const data = await fetchCategories();
-      if (data.length > 0) {
-        setCategories(data);
-      }
-    };
-    const fetchAndSetLocations = async () => {
-      const data = await fetchLocations();
-      if (data.length > 0) {
-        setLocations(data);
-      }
-    };
-
-    fetchAndSetCategories();
-    fetchAndSetLocations();
+    fetchCategories();
+    fetchLocations();
   }, []);
 
-  //abrir y cerrar modal
-  const [visible, setVisible] = useState(false);
-  const abrirModal = () =>
-  {
-    setVisible(true);
+  const validateForm = () => {
+    let valid = true;
+    const newErrors = {};
+
+    if (!name) {
+      newErrors.name = 'El nombre es obligatorio';
+      valid = false;
+    }
+
+    if (!description) {
+      newErrors.description = 'La descripción es obligatoria';
+      valid = false;
+    }
+
+    if (!id_event_category) {
+      newErrors.id_event_category = 'La categoría es obligatoria';
+      valid = false;
+    }
+
+    if (!id_event_location) {
+      newErrors.id_event_location = 'La ubicación es obligatoria';
+      valid = false;
+    }
+
+    if (!start_date) {
+      newErrors.start_date = 'La fecha es obligatoria';
+      valid = false;
+    }
+
+    if (!duration_in_minutes || isNaN(duration_in_minutes) || duration_in_minutes <= 0) {
+      newErrors.duration_in_minutes = 'La duración es obligatoria y debe ser un número positivo';
+      valid = false;
+    }
+
+    if (!price || isNaN(price) || price <= 0) {
+      newErrors.price = 'El precio es obligatorio y debe ser un número positivo';
+      valid = false;
+    }
+
+    if (!max_assistance || isNaN(max_assistance) || max_assistance <= 0) {
+      newErrors.max_assistance = 'La cantidad máxima de personas es obligatoria y debe ser un número positivo';
+      valid = false;
+    }
+
+    setErrors(newErrors);
+    return valid;
+  };
+
+  const abrirModal = () => {
+    if (validateForm()) {
+      setVisible(true);
+    }
+  };
+
+  const OnPressNavigation = () => {
+    navigation.navigate('Home', { updateEvents: true });
   };
 
   return (
@@ -104,16 +131,18 @@ function FormularioScreen ({navigation}) {
           placeholder="Nombre"
           value={name}
           onChangeText={setName}
-          autoCapitalize="none"
           style={styles.input}
         />
+        {errors.name && <Text style={styles.errorText}>{errors.name}</Text>}
+
         <TextInput
-          placeholder="Descripcion"
+          placeholder="Descripción"
           value={description}
           onChangeText={setDescription}
-          autoCapitalize="none"
           style={styles.input}
         />
+        {errors.description && <Text style={styles.errorText}>{errors.description}</Text>}
+
         <Picker
           style={styles.picker}
           selectedValue={id_event_category}
@@ -123,6 +152,8 @@ function FormularioScreen ({navigation}) {
             <Picker.Item key={category.id} label={category.name} value={category.id} />
           ))}
         </Picker>
+        {errors.id_event_category && <Text style={styles.errorText}>{errors.id_event_category}</Text>}
+
         <Picker
           style={styles.picker}
           selectedValue={id_event_location}
@@ -132,44 +163,50 @@ function FormularioScreen ({navigation}) {
             <Picker.Item key={location.id} label={location.name} value={location.id} />
           ))}
         </Picker>
+        {errors.id_event_location && <Text style={styles.errorText}>{errors.id_event_location}</Text>}
+
         <TextInput
           placeholder="Fecha"
           value={start_date}
           onChangeText={setStartDate}
-          autoCapitalize="none"
           style={styles.input}
         />
+        {errors.start_date && <Text style={styles.errorText}>{errors.start_date}</Text>}
+
         <TextInput
-          placeholder="Duracion"
+          placeholder="Duración"
           value={duration_in_minutes}
           onChangeText={setDurationInMinutes}
           keyboardType="numeric"
-          autoCapitalize="none"
           style={styles.input}
         />
+        {errors.duration_in_minutes && <Text style={styles.errorText}>{errors.duration_in_minutes}</Text>}
+
         <TextInput
           placeholder="Precio"
           value={price}
           onChangeText={setPrice}
           keyboardType="numeric"
-          autoCapitalize="none"
           style={styles.input}
         />
+        {errors.price && <Text style={styles.errorText}>{errors.price}</Text>}
+
         <TextInput
-          placeholder="Cantidad maxima de personas"
+          placeholder="Cantidad máxima de personas"
           value={max_assistance}
           onChangeText={setMaxAssistance}
           keyboardType="numeric"
-          autoCapitalize="none"
           style={styles.input}
-        />     
+        />
+        {errors.max_assistance && <Text style={styles.errorText}>{errors.max_assistance}</Text>}
       </View>
- 
-      <Button title="Confirmar" onPress={abrirModal}/>
-      <Button title="Cancelar" onPress={() => navigation.navigate('Home')}/>
+
+      <Button title="Confirmar" onPress={abrirModal} />
+      <Button title="Cancelar" onPress={() => navigation.navigate('Home')} />
     </View>
   );
-};
+}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -195,6 +232,12 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     borderRadius: 5,
     marginBottom: 20,
-  }
- });
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 12,
+    marginBottom: 10,
+  },
+});
+
 export default FormularioScreen;
