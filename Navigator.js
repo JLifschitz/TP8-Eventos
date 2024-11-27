@@ -9,6 +9,7 @@ import FormularioScreen from './pantallas/Formulario';
 import DetallesEventoScreen from './pantallas/DetallesEvento';
 import PanelAdminScreen from './pantallas/PanelAdmin.js';
 import DetalleEventoAdminScreen from './pantallas/DetalleEventoAdmin.js';
+import EditarEventoScreen from './pantallas/EditarEvento.js';
 const Stack = createNativeStackNavigator();
 
 const Navigation = () => {
@@ -27,6 +28,7 @@ const Navigation = () => {
           <Stack.Screen name="DetallesEvento" component={DetallesEventoScreen}/>
           <Stack.Screen name="PanelAdmin" component={PanelAdminScreen}/>
           <Stack.Screen name="DetallesEventoAdmin" component={DetalleEventoAdminScreen}/>
+          <Stack.Screen name="EditarEvento" component={EditarEventoScreen}/>
         </Stack.Navigator>
       </NavigationContainer>
     </UserProvider>

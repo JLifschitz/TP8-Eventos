@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { View, Text, StyleSheet, FlatList, Button, Pressable, ScrollView} from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute, useFocusEffect} from '@react-navigation/native';
 import DBDomain from '../constants/DBDomain.js';
 import {useUserContext} from '../context/userContext.js';
 import EventoCard from '../components/eventoCard.js';
@@ -42,11 +42,18 @@ function HomeScreen ({navigation}) {
     if (route.params?.updateEvents) {
       const reloadEvents = async () => {
         const events = await fetchEvents();
-        setEventos(events); // Actualiza los eventos después de la creación
+        setEventos(events);
       };
       reloadEvents();
     }
   }, [route.params?.updateEvents]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      // Esto asegura que los datos se vuelvan a cargar cuando la pantalla se enfoque
+      fetchEvents();
+    }, [])
+  );
 
   return (
     <View style={styles.container}>

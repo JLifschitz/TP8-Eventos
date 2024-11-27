@@ -53,7 +53,7 @@ function DetallesEventoScreen({ navigation, route }) {
     
       return data;
     } catch (error) {
-      console.log('Hubo un error al inscribirse', error);
+      alert('Hubo un error al inscribirse', error);
       Alert.alert("Error al inscribirse");
     }
   };

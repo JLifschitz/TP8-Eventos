@@ -83,7 +83,7 @@ function DetalleEventoAdminScreen ({ navigation, route }) {
                 renderItem={({ item }) => <Text>{item.name}</Text>}
                 keyExtractor={item => item.id.toString()}
             />
-            <Button title="Editar Evento" onPress={() => navigation.navigate('EditarEvento')} />
+            <Button title="Editar Evento" onPress={() => navigation.navigate('EditarEvento', {id_event: id_event})} />
             <Button title="Eliminar Evento" onPress={eliminarEvento} />
             <Button title="Volver" onPress={() => navigation.navigate('PanelAdmin')} />
             </View>
