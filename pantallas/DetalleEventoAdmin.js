@@ -69,7 +69,7 @@ function DetalleEventoAdminScreen ({ navigation, route }) {
             <View style={styles.container}>
             <Text>{evento.name}</Text>
             <View>
-                <Text>{evento.description}</Text>
+                <Text>Description: {evento.description}</Text>
                 <Text>Empieza: {evento.start_date}</Text>
                 <Text>Duración: {evento.duration_in_minutes} minutos</Text>
                 <Text>Precio: {evento.price}</Text>
@@ -78,12 +78,14 @@ function DetalleEventoAdminScreen ({ navigation, route }) {
                 <Text>Categoría: {evento.Category.name}</Text>
                 <Text>Tags: {evento.Tags.name}</Text>
             </View>
+            <Text>Participantes</Text>
             <FlatList
                 data={participantes}
-                renderItem={({ item }) => <Text>{item.name}</Text>}
+                renderItem={({ item }) =>
+                    <Text>{item.first_name} {item.last_name}: {item.registration_date_time}</Text>}
                 keyExtractor={item => item.id.toString()}
             />
-            <Button title="Editar Evento" onPress={() => navigation.navigate('EditarEvento', {id_event: id_event})} />
+            <Button title="Editar Evento" onPress={() => navigation.navigate('EditarEvento', {id_event: id_event, evento: evento})} />
             <Button title="Eliminar Evento" onPress={eliminarEvento} />
             <Button title="Volver" onPress={() => navigation.navigate('PanelAdmin')} />
             </View>

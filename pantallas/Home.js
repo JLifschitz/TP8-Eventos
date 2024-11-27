@@ -63,7 +63,7 @@ function HomeScreen ({navigation}) {
           data={eventos}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({item}) =>
-          <Pressable onPress={() => navigation.navigate('DetallesEvento', {id_event: item.id})}>
+            <Pressable onPress={() => navigation.navigate('DetallesEvento', {id_event: item.id})}>
               <EventoCard evento={item}/>
             </Pressable>
           }
