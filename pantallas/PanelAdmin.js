@@ -34,36 +34,16 @@ function PanelAdminScreen ({navigation}) {
     }
   };
 
-  const eliminarEvento = async (id_event) => {
-    const urlApi = `${DBDomain}/api/event/${id_event}`;
-    try {
-        const response = await fetch(urlApi, {
-          method: 'DELETE',
-        });
-
-        if (!response.ok) throw new Error('Failed to delete event');
-
-        Alert.alert("Éxito", "Evento eliminado correctamente");
-        fetchEventos(); // Refresca el listado
-    } catch (error) {
-        console.log('Error eliminando evento', error);
-    }
-  };
+  const deleteEventoFromList = (id) => {
+    setEventosProximos((prevEventos) => prevEventos.filter(evento => evento.id !== id));
+    setEventosPasados((prevEventos) => prevEventos.filter(evento => evento.id !== id));
+  }
 
   useEffect( async () => {
     setEventosProximos([]);
     setEventosPasados([]);
     const events = await fetchEventos();
   }, []);
-  
-  useEffect(() => {
-    if (route.params?.updateEvents) {
-      const reloadEvents = async () => {
-        const events = await fetchEventos();
-      };
-      reloadEvents();
-    }
-  }, [route.params?.updateEvents]);
 
   return (
     <View style={styles.container}>
@@ -73,7 +53,7 @@ function PanelAdminScreen ({navigation}) {
           data={eventosProximos}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({item}) =>
-          <Pressable onPress={() => navigation.navigate('DetallesEventoAdmin', {id_event: item.id})}>
+          <Pressable onPress={() => navigation.navigate('DetallesEventoAdmin', {id_event: item.id, deleteEventoFromList: deleteEventoFromList})}>
               <EventoCard evento={item}/>
             </Pressable>
           }

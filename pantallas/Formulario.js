@@ -13,9 +13,9 @@ function FormularioScreen({ navigation }) {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [categories, setCategories] = useState([]);
-  const [id_event_category, setIdEventCategory] = useState('');
+  const [id_event_category, setIdEventCategory] = useState(null);
   const [locations, setLocations] = useState([]);
-  const [id_event_location, setIdEventLocation] = useState('');
+  const [id_event_location, setIdEventLocation] = useState(null);
   const [start_date, setStartDate] = useState('');
   const [duration_in_minutes, setDurationInMinutes] = useState('');
   const [price, setPrice] = useState('');
@@ -63,6 +63,16 @@ function FormularioScreen({ navigation }) {
     fetchCategories();
     fetchLocations();
   }, []);
+
+  useEffect(() => {
+    if (categories.length > 0 && id_event_category === null) {
+      setIdEventCategory(categories[0].id);
+    }
+  
+    if (locations.length > 0 && id_event_location === null) {
+      setIdEventLocation(locations[0].id);
+    }
+  }, [categories, locations]);
 
   const validateForm = () => {
     let valid = true;

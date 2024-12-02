@@ -4,10 +4,10 @@ import DBDomain from '../constants/DBDomain.js';
 import {useUserContext} from '../context/userContext.js';
 
 function DetalleEventoAdminScreen ({ navigation, route }) {
-    const {usuario} = useUserContext();
-    const { id_event } = route.params;
+    const {token} = useUserContext();
+    const { id_event, deleteEventoFromList } = route.params;
     const [evento, setEvento] = useState();
-    const [participantes, setParticipantes] = useState([]);
+    const [participantes, setParticipantes] = useState(null);
 
     const fetchEvento = async () => {
         const urlApi = `${DBDomain}/api/event/${id_event}`;
@@ -27,25 +27,33 @@ function DetalleEventoAdminScreen ({ navigation, route }) {
         try {
             const response = await fetch(urlApi);
             if (!response.ok) throw new Error('Failed to fetch data');
-
+            
             const data = await response.json();
             setParticipantes(data);
         } catch (error) {
             console.log('Error fetching participantes', error);
         }
     };
-
+    
     const DeleteEvento = async () => {
         const urlApi = `${DBDomain}/api/event/${id_event}`;
         try {
             const response = await fetch(urlApi, {
                 method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
             });
-
+            
             if (!response.ok) throw new Error('Failed to delete event');
+            const data = await response.json();
+            if(data)
+            {
+                deleteEventoFromList(id_event)
+                Alert.alert("Éxito", "Evento eliminado correctamente");
+            }
 
-            Alert.alert("Éxito", "Evento eliminado correctamente");
-            navigation.goBack();
         } catch (error) {
             console.log('Error eliminando evento', error);
         }
@@ -79,12 +87,14 @@ function DetalleEventoAdminScreen ({ navigation, route }) {
                 <Text>Tags: {evento.Tags.name}</Text>
             </View>
             <Text>Participantes</Text>
+            {participantes != null ? (
             <FlatList
                 data={participantes}
                 renderItem={({ item }) =>
                     <Text>{item.first_name} {item.last_name}: {item.registration_date_time}</Text>}
                 keyExtractor={item => item.id.toString()}
             />
+            ) : <Text>No hay participantes</Text>}
             <Button title="Editar Evento" onPress={() => navigation.navigate('EditarEvento', {id_event: id_event, evento: evento})} />
             <Button title="Eliminar Evento" onPress={eliminarEvento} />
             <Button title="Volver" onPress={() => navigation.navigate('PanelAdmin')} />

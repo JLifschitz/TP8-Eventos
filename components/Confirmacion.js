@@ -57,7 +57,6 @@ const ConfirmacionModal = ({visible, setVisible, newEvent, OnPressNavigation}) =
   const crearEvento = async () => {
     const data = await createEventPost();
     if (data) {
-      console.log('success', data)
       cerrarModal();
       alert(Success);
       OnPressNavigation();

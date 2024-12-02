@@ -70,7 +70,7 @@ function EditarEventoScreen ({ route }) {
         }),
       });
 
-      console.log('eventPut: ', response);
+    console.log('modificar evento: ', response);
     if (!response.ok) {
       throw new Error('Failed to fetch data');
     }
@@ -98,14 +98,14 @@ function EditarEventoScreen ({ route }) {
       newErrors.description = 'La descripción es obligatoria';
       valid = false;
     }
-    if (!id_event_category) {
+    if (!id_event_category && id_event_category !== evento.id_event_category) {
       newErrors.id_event_category = 'La categoría es obligatoria';
       valid = false;
     }
-    if (!id_event_location) {
+    if (!id_event_location && id_event_location !== evento.id_event_location) {
       newErrors.id_event_location = 'La ubicación es obligatoria';
       valid = false;
-    }
+    }   
     if (!start_date) {
       newErrors.start_date = 'La fecha es obligatoria';
       valid = false;
@@ -143,6 +143,16 @@ function EditarEventoScreen ({ route }) {
     fetchCategories();
     fetchLocations();
   }, []);
+
+  useEffect(() => {
+    if (categories.length > 0 && id_event_category === undefined) {
+      setIdEventCategory(evento.id_event_category);
+    }
+  
+    if (locations.length > 0 && id_event_location === undefined) {
+      setIdEventLocation(evento.id_event_location);
+    }
+  }, [categories, locations, evento]);
 
   return (
     <View style={styles.container}>
