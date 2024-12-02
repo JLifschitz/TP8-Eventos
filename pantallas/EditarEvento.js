@@ -13,9 +13,9 @@ function EditarEventoScreen ({ route }) {
   const [name, setName] = useState(evento.name);
   const [description, setDescription] = useState(evento.description);
   const [categories, setCategories] = useState([]);
-  const [id_event_category, setIdEventCategory] = useState(evento.id_event_category);
+  const [id_event_category, setIdEventCategory] = useState(evento.Category.id);
   const [locations, setLocations] = useState([]);
-  const [id_event_location, setIdEventLocation] = useState(evento.id_event_location);
+  const [id_event_location, setIdEventLocation] = useState(evento.Location.id);
   const [start_date, setStartDate] = useState(evento.start_date);
   const [duration_in_minutes, setDurationInMinutes] = useState(evento.duration_in_minutes);
   const [price, setPrice] = useState(evento.price);
@@ -66,21 +66,18 @@ function EditarEventoScreen ({ route }) {
           price: price,
           enable_for_enrollment: true,
           max_assistance: max_assistance,
-          id_creator_user: usuario.id_creator_user,
         }),
       });
+      if (!response.ok) {
+        throw new Error('Failed to fetch data');
+      }
 
-    console.log('modificar evento: ', response);
-    if (!response.ok) {
-      throw new Error('Failed to fetch data');
-    }
+      const data = await response.json();
+      if (!data) {
+        throw new Error('No data returned');
+      }
 
-    const data = await response.json();
-    if (!data) {
-      throw new Error('No data returned');
-    }
-
-    return data;
+      return data;
     } catch (error) {
       console.log('Hubo un error en el modificar evento', error);
     }
@@ -132,9 +129,8 @@ function EditarEventoScreen ({ route }) {
     {
       const data = await EventPut();
       if (data) {
-        console.log('success', data)
-        alert(Success);
-        navigation.goBack();
+        alert('Modificado con exito');
+        navigation.navigate('DetallesEventoAdmin', {id_event: id_event});
       }
     }
   };
